@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiBuscador.Controllers;
+namespace Buscador.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,4 +1,4 @@
-namespace ApiBuscador;
+namespace Buscador.Api;
 
 public class WeatherForecast
 {
