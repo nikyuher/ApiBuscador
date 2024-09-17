@@ -4,17 +4,19 @@ using Buscador.Models;
 namespace Buscador.Data
 {
     public class EmpresaRepository : IEmpresaRepository
-{
-        private readonly BuscadorAppContext _context;
+    {
+        private readonly BuscadorContext _context;
 
-        public EmpresaRepository (BuscadorAppContext context)
+        public EmpresaRepository(BuscadorContext context)
         {
             _context = context;
         }
 
         public List<Empresa> GetAll()
         {
-            return _context.Empresas.ToList();
+            var empresas = _context.Empresas.ToList();
+
+            return empresas;
         }
     }
 }

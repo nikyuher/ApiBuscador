@@ -8,5 +8,5 @@ public class Ciudad
     [Required]
     public string? Nombre { get; set; }
 
-    public ICollection<EmpresaCiudad>? EmpresasCiudades { get; set; }
+    public List<EmpresaCiudad>? EmpresasCiudades { get; set; }
 }

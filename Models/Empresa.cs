@@ -14,7 +14,7 @@ public class Empresa
     public string? Imagen { get; set; }
 
     // Relación muchos a muchos
-    public ICollection<EmpresaCategoria>? EmpresaCategorias { get; set; }
-    public ICollection<EmpresaCiudad>? EmpresasCiudades { get; set; }
+    public List<EmpresaCategoria>? EmpresaCategorias { get; set; }
+    public List<EmpresaCiudad>? EmpresasCiudades { get; set; }
 
 }

@@ -3,10 +3,10 @@ namespace Buscador.Data;
 using Microsoft.EntityFrameworkCore;
 using Buscador.Models;
 
-public class BuscadorAppContext : DbContext
+public class BuscadorContext : DbContext
 {
 
-    public BuscadorAppContext(DbContextOptions<BuscadorAppContext> options)
+    public BuscadorContext(DbContextOptions<BuscadorContext> options)
     : base(options)
     { }
 

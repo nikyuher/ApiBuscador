@@ -10,5 +10,5 @@ public class Categoria
     public string? Nombre { get; set; }
 
  // Relación muchos a muchos
-    public ICollection<EmpresaCategoria>? EmpresaCategorias { get; set; }
+    public List<EmpresaCategoria>? EmpresaCategorias { get; set; }
 }
