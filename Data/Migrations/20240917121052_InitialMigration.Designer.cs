@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Buscador.Data.Migrations
 {
     [DbContext(typeof(BuscadorContext))]
-    [Migration("20240917070644_Migracion")]
-    partial class Migracion
+    [Migration("20240917121052_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
