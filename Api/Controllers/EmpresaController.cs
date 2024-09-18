@@ -24,6 +24,22 @@ namespace Buscador.Api.Controllers
             return Ok(empresas);
         }
 
+        [HttpGet("buscar",Name = "BuscadorEmpresaNombre")]
+        public ActionResult<List<Empresa>> BuscadorEmpresaNombre(string nombre)
+        {
+
+            try
+            {
+
+                var empresas = _empresaService.BuscadorEmpresaNombre(nombre);
+                return Ok(empresas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("{id}")]
         public ActionResult<Empresa> GetById(int id)
         {

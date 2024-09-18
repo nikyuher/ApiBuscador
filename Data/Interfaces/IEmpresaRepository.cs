@@ -6,6 +6,7 @@ namespace Buscador.Data
     public interface IEmpresaRepository
     {
         List<Empresa> GetAll();
+        public List<Empresa> BuscadorEmpresaNombre(string nombre);
         Empresa GetById(int id);
         public Empresa Add(AddEmpresaDTO empresa);
         void Update(Empresa empresa);

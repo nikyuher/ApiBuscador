@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Buscador.Models;
+using System.Text;
+using System.Globalization;
 
 namespace Buscador.Data
 {
@@ -38,6 +39,30 @@ namespace Buscador.Data
 
             return ciudadaDTO;
         }
+
+        public List<CiudadDTO> BuscadorCiudadNombre(string nombre)
+        {
+            var normalizedNombre = RemoveDiacritics(nombre.ToLower());
+
+            var ciudades = _context.Ciudadades
+                .AsEnumerable() // Trae todos los datos en memoria
+                .Where(e => RemoveDiacritics(e.Nombre.ToLower()).Contains(normalizedNombre))
+                .OrderBy(e => RemoveDiacritics(e.Nombre.ToLower()).IndexOf(normalizedNombre))
+                .Select(e => new CiudadDTO
+                {
+                    IdCiudad = e.IdCiudad,
+                    Nombre = e.Nombre
+                })
+                .ToList();
+
+            if (!ciudades.Any())
+            {
+                throw new Exception($"No existe una ciudad con un nombre relacionado a {nombre}");
+            }
+
+            return ciudades;
+        }
+
 
         public CiudadDTO GetCiudadId(int idCiudad)
         {
@@ -100,6 +125,24 @@ namespace Buscador.Data
             _context.Ciudadades.Remove(ciudad);
             SaveChanges();
 
+        }
+
+        // Método para quitar acentos
+        private string RemoveDiacritics(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
         public void SaveChanges()

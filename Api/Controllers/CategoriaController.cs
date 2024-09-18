@@ -34,12 +34,30 @@ namespace Buscador.Api.Controllers
 
         [HttpGet("id/{idCategoria}", Name = "GetCategoriaId")]
 
-        public ActionResult<CiudadDTO> GetCategoriaId(int idCategoria)
+        public ActionResult<GetCategoriaDTO> GetCategoriaId(int idCategoria)
         {
             try
             {
 
                 var categoria = _categoriaService.GetCategoriaId(idCategoria);
+
+                return Ok(categoria);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("id={idCategoria}/empresas", Name = "GetEmpresasCategoria")]
+
+        public ActionResult<GetCategoriaEmpresasDTO> GetEmpresasCategoria(int idCategoria)
+        {
+            try
+            {
+
+                var categoria = _categoriaService.GetEmpresaSCategoria(idCategoria);
 
                 return Ok(categoria);
 
