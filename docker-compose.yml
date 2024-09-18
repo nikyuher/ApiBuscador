@@ -18,24 +18,18 @@ services:
       - sqlserver-data:/var/opt/mssql
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>
-
+      - MSSQL_SA_PASSWORD=YourStrongPassword123
+      - MSSQL_AGENT_ENABLED=true
   api:
-    build:
-      context: .
-      dockerfile: Api/Dockerfile
+    image: apidb-buscador:1.0
     ports:
       - "8001:80"
     networks:
       - backend
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
     depends_on:
       - db
     environment:
-      - DOCKER_CONTAINER=true
-   # web:
-        #container_name: webContainer
-   #     image: web:1.0
-    #    ports:
-     #       - 9000:8080 
-      #  depends_on:
-       #     - api
+      - Environment=Docker  

@@ -1,11 +1,20 @@
 using Buscador.Business;
 using Buscador.Data;
+using Serilog;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuración de la cadena de conexión
-var connectionString = builder.Configuration.GetConnectionString("BuscadorDB");
+
+// Configuración del entorno y la cadena de conexión
+var configuration = builder.Configuration;
+var environment = configuration["Environment"];
+
+var connectionString = environment == "Docker" ?
+    configuration.GetConnectionString("BuscadorDB") :
+    configuration.GetConnectionString("BuscadorDBlocal");
 
 // Registrar DbContext con la cadena de conexión
 builder.Services.AddDbContext<BuscadorContext>(options =>
@@ -38,4 +47,19 @@ app.UseCors(policyBuilder => policyBuilder
 
 app.UseAuthorization();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<BuscadorContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Log.Fatal(ex, "Error durante la migración de la base de datos.");
+    }
+}
+
 app.Run();
