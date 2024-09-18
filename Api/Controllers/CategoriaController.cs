@@ -32,6 +32,24 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [HttpGet("id/{idCategoria}", Name = "GetCategoriaId")]
+
+        public ActionResult<CiudadDTO> GetCategoriaId(int idCategoria)
+        {
+            try
+            {
+
+                var categoria = _categoriaService.GetCategoriaId(idCategoria);
+
+                return Ok(categoria);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("{nombre}", Name = "GetCategoria")]
 
         public ActionResult<GetCategoriaDTO> GetCategoria(string nombre)

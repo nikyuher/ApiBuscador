@@ -23,6 +23,24 @@ namespace Buscador.Api.Controllers
             return Ok(ciudades);
         }
 
+        [HttpGet("id/{idCiudad}", Name = "GetCiudadId")]
+
+        public ActionResult<CiudadDTO> GetCiudadId(int idCiudad)
+        {
+            try
+            {
+
+                var ciudad = _ciudadService.GetCiudadId(idCiudad);
+
+                return Ok(ciudad);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("{nombre}", Name = "GetCiudad")]
 
         public ActionResult<CiudadDTO> GetCiudad(string nombre)
@@ -69,7 +87,7 @@ namespace Buscador.Api.Controllers
             try
             {
 
-                 _ciudadService.UpdateCiudad(ciudadDTO);
+                _ciudadService.UpdateCiudad(ciudadDTO);
                 return Ok(ciudadDTO);
             }
             catch (Exception ex)

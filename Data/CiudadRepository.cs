@@ -32,6 +32,25 @@ namespace Buscador.Data
 
             var ciudadaDTO = new CiudadDTO
             {
+                IdCiudad = ciudad.IdCiudad,
+                Nombre = ciudad.Nombre
+            };
+
+            return ciudadaDTO;
+        }
+
+        public CiudadDTO GetCiudadId(int idCiudad)
+        {
+            var ciudad = _context.Ciudadades.FirstOrDefault(c => c.IdCiudad == idCiudad);
+
+            if (ciudad == null)
+            {
+                throw new Exception($"No se encontró la ciudad con el ID: {idCiudad}");
+            }
+
+            var ciudadaDTO = new CiudadDTO
+            {
+                IdCiudad = ciudad.IdCiudad,
                 Nombre = ciudad.Nombre
             };
 

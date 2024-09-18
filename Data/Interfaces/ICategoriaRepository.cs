@@ -8,6 +8,7 @@ namespace Buscador.Data
     {
         public List<Categoria> GetAll();
         public GetCategoriaDTO GetCategoria(string nombre);
+        public GetCategoriaDTO GetCategoriaId(int idCategoria);
         public Categoria CreateCategoria(AddCategoriaDTO categoria);
         public void UpdateCategoria(UpdateCategoriaDTO categoriaDTO);
         public void DeleteCategoria(int idCategoria);
