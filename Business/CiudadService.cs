@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Buscador.Business
 {
-    public class CiudadService :ICiudadService
+    public class CiudadService : ICiudadService
     {
         private readonly ICiudadRepository _ciudadRepository;
 
@@ -15,7 +15,27 @@ namespace Buscador.Business
             _ciudadRepository = ciudadRepository;
         }
 
-        public List<Ciudad> GetAll() => _ciudadRepository.GetAll();
+
+        public List<Ciudad> GetAll()
+        {
+            return _ciudadRepository.GetAll();
+        }
+        public CiudadDTO GetCiudad(string nombre)
+        {
+            return _ciudadRepository.GetCiudad(nombre);
+        }
+        public Ciudad CreateCiudad(CiudadDTO ciudad)
+        {
+            return _ciudadRepository.CreateCiudad(ciudad);
+        }
+        public void UpdateCiudad(CiudadDTO ciudadDTO)
+        {
+            _ciudadRepository.UpdateCiudad(ciudadDTO);
+        }
+        public void DeleteCiudad(int idCiudad)
+        {
+            _ciudadRepository.DeleteCiudad(idCiudad);
+        }
 
     }
 }

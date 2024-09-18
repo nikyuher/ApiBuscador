@@ -15,7 +15,7 @@ namespace Buscador.Api.Controllers
             _categoriaService = categoriaService;
         }
 
-        // Devuelve la lista de todas las empresas
+        // Get
         [HttpGet(Name = "GetAll")]
         public ActionResult<List<Categoria>> GetAll()
         {
@@ -52,6 +52,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        //Post
         [HttpPost(Name = "AddCategoria")]
 
         public ActionResult AddCategoria([FromBody] AddCategoriaDTO categoriaDTO)
@@ -80,7 +81,7 @@ namespace Buscador.Api.Controllers
             {
 
                 _categoriaService.UpdateCategoria(categoriaDTO);
-                return Ok();
+                return Ok(categoriaDTO);
             }
             catch (Exception ex)
             {
