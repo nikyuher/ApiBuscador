@@ -1,9 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using Buscador.Models;
+using System.Collections.Generic;
 
-
-namespace Buscador.Data{
-    public interface IEmpresaRepository{
-       public List<Empresa> GetAll();
+namespace Buscador.Data
+{
+    public interface IEmpresaRepository
+    {
+        List<Empresa> GetAll();
+        Empresa GetById(int id);
+        public Empresa Add(AddEmpresaDTO empresa);
+        void Update(Empresa empresa);
+        void Delete(int id);
     }
 }
