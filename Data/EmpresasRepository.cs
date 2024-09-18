@@ -14,6 +14,7 @@ namespace Buscador.Data
             _context = context;
         }
 
+        //Get
         public List<Empresa> GetAll()
         {
             return _context.Empresas.ToList();
@@ -21,12 +22,10 @@ namespace Buscador.Data
 
         public List<Empresa> BuscadorEmpresaNombre(string nombre)
         {
-            // Normalizar y quitar acentos del término de búsqueda
             var normalizedNombre = RemoveDiacritics(nombre.ToLower());
 
-            // Consultar todas las empresas
             var empresas = _context.Empresas
-                .AsEnumerable() // Cambia la consulta a cliente para usar RemoveDiacritics
+                .AsEnumerable()
                 .Where(e => RemoveDiacritics(e.Nombre.ToLower()).Contains(normalizedNombre))
                 .OrderBy(e => RemoveDiacritics(e.Nombre.ToLower()).IndexOf(normalizedNombre))
                 .ToList();
@@ -39,12 +38,12 @@ namespace Buscador.Data
             return empresas;
         }
 
-
         public Empresa GetById(int id)
         {
             return _context.Empresas.Find(id);
         }
 
+        //Post
         public Empresa Add(AddEmpresaDTO empresa)
         {
             var newEmpresa = new Empresa
@@ -56,18 +55,31 @@ namespace Buscador.Data
             };
             _context.Empresas.Add(newEmpresa);
 
-
             _context.SaveChanges();
 
             return newEmpresa;
         }
 
+        public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        {
+
+            var newCategoriaEmpresa = new EmpresaCategoria
+            {
+                IdCategoria = empresaCategoria.IdCategoria,
+                IdEmpresa = empresaCategoria.IdEmpresa
+            };
+            return newCategoriaEmpresa;
+        }
+
+        //Update
         public void Update(Empresa empresa)
         {
             _context.Entry(empresa).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
+
+        //Delete
         public void Delete(int id)
         {
             var empresa = _context.Empresas.Find(id);

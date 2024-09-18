@@ -14,14 +14,18 @@ namespace Buscador.Business
         }
 
         public List<Empresa> GetAll() => _empresaRepository.GetAll();
-        public List<Empresa> BuscadorEmpresaNombre(string nombre){
+        public List<Empresa> BuscadorEmpresaNombre(string nombre)
+        {
             return _empresaRepository.BuscadorEmpresaNombre(nombre);
         }
 
         public Empresa GetById(int id) => _empresaRepository.GetById(id);
 
         public Empresa Add(AddEmpresaDTO empresa) => _empresaRepository.Add(empresa);
-
+        public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        {
+            return _empresaRepository.AddCategoriaEmpresa(empresaCategoria);
+        }
         public void Update(Empresa empresa) => _empresaRepository.Update(empresa);
 
         public void Delete(int id) => _empresaRepository.Delete(id);
