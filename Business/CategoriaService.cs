@@ -22,6 +22,11 @@ namespace Buscador.Business
             return _categoriaRepository.GetCategoriaId(idCategoria);
         }
 
+        public GetCategoriaEmpresasDTO GetEmpresaSCategoria(int id)
+        {
+            return _categoriaRepository.GetEmpresaSCategoria(id);
+        }
+
         public GetCategoriaDTO GetCategoria(string nombre)
         {
             var categoria = _categoriaRepository.GetCategoria(nombre);

@@ -1,7 +1,5 @@
 ﻿﻿using Microsoft.EntityFrameworkCore;
 using Buscador.Models;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Globalization;
 
@@ -21,7 +19,7 @@ namespace Buscador.Data
             return _context.Empresas.ToList();
         }
 
-        public List<Empresa> GetEmpresaNombre(string nombre)
+        public List<Empresa> BuscadorEmpresaNombre(string nombre)
         {
             // Normalizar y quitar acentos del término de búsqueda
             var normalizedNombre = RemoveDiacritics(nombre.ToLower());
@@ -29,7 +27,7 @@ namespace Buscador.Data
             // Consultar todas las empresas
             var empresas = _context.Empresas
                 .AsEnumerable() // Cambia la consulta a cliente para usar RemoveDiacritics
-                .Where(e => RemoveDiacritics(e.Nombre.ToLower()).StartsWith(normalizedNombre))
+                .Where(e => RemoveDiacritics(e.Nombre.ToLower()).Contains(normalizedNombre))
                 .OrderBy(e => RemoveDiacritics(e.Nombre.ToLower()).IndexOf(normalizedNombre))
                 .ToList();
 

@@ -14,8 +14,8 @@ namespace Buscador.Business
         }
 
         public List<Empresa> GetAll() => _empresaRepository.GetAll();
-        public List<Empresa> GetEmpresaNombre(string nombre){
-            return _empresaRepository.GetEmpresaNombre(nombre);
+        public List<Empresa> BuscadorEmpresaNombre(string nombre){
+            return _empresaRepository.BuscadorEmpresaNombre(nombre);
         }
 
         public Empresa GetById(int id) => _empresaRepository.GetById(id);

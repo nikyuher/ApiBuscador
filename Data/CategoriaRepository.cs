@@ -55,6 +55,37 @@ namespace Buscador.Data
 
             return categoriaDTO;
         }
+
+        public GetCategoriaEmpresasDTO GetEmpresaSCategoria(int id)
+        {
+            var categoria = _context.Categorias
+                .Include(c => c.EmpresaCategorias)
+                .ThenInclude(ec => ec.Empresa) 
+                .FirstOrDefault(c => c.IdCategoria == id);
+
+            if (categoria is null)
+            {
+                throw new Exception($"Categoría con ID {id} no encontrada.");
+            }
+
+            var categoriaDTO = new GetCategoriaEmpresasDTO
+            {
+                IdCategoria = categoria.IdCategoria,
+                Nombre = categoria.Nombre,
+                EmpresaCategorias = categoria.EmpresaCategorias.Select(ec => new EmpresasCategoriaDTO
+                {
+                    IdEmpresaCategoria = ec.IdEmpresaCategoria,
+                    Empresa = new NameEmpresaDTO
+                    {
+                        IdEmpresa = ec.Empresa.IdEmpresa,
+                        Nombre = ec.Empresa.Nombre
+                    }
+                }).ToList()
+            };
+
+            return categoriaDTO;
+        }
+
         //Create 
 
         public Categoria CreateCategoria(AddCategoriaDTO categoria)

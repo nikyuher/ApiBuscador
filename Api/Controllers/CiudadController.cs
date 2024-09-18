@@ -41,6 +41,22 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [HttpGet("buscar", Name = "GetCiudadNombre")]
+        public ActionResult<List<CiudadDTO>> GetCiudadNombre(string nombre)
+        {
+
+            try
+            {
+
+                var ciudad = _ciudadService.BuscadorCiudadNombre(nombre);
+                return Ok(ciudad);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("{nombre}", Name = "GetCiudad")]
 
         public ActionResult<CiudadDTO> GetCiudad(string nombre)

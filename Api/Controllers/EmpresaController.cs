@@ -24,14 +24,14 @@ namespace Buscador.Api.Controllers
             return Ok(empresas);
         }
 
-        [HttpGet("Nombre",Name = "GetEmpresaNombre")]
-        public ActionResult<List<Empresa>> GetEmpresaNombre(string nombre)
+        [HttpGet("buscar",Name = "BuscadorEmpresaNombre")]
+        public ActionResult<List<Empresa>> BuscadorEmpresaNombre(string nombre)
         {
 
             try
             {
 
-                var empresas = _empresaService.GetEmpresaNombre(nombre);
+                var empresas = _empresaService.BuscadorEmpresaNombre(nombre);
                 return Ok(empresas);
             }
             catch (Exception ex)
