@@ -31,6 +31,25 @@ namespace Buscador.Data
 
             var categoriaDTO = new GetCategoriaDTO
             {
+                IdCategoria = categoria.IdCategoria,
+                Nombre = categoria.Nombre
+            };
+
+            return categoriaDTO;
+        }
+
+        public GetCategoriaDTO GetCategoriaId(int idCategoria)
+        {
+            var categoria = _context.Categorias.FirstOrDefault(c => c.IdCategoria == idCategoria);
+
+            if (categoria == null)
+            {
+                throw new Exception($"No se encontró la categoria con el ID: {idCategoria}");
+            }
+
+            var categoriaDTO = new GetCategoriaDTO
+            {
+                IdCategoria = categoria.IdCategoria,
                 Nombre = categoria.Nombre
             };
 

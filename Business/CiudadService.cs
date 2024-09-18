@@ -20,6 +20,10 @@ namespace Buscador.Business
         {
             return _ciudadRepository.GetAll();
         }
+        public CiudadDTO GetCiudadId(int idCiudad)
+        {
+            return _ciudadRepository.GetCiudadId(idCiudad);
+        }
         public CiudadDTO GetCiudad(string nombre)
         {
             return _ciudadRepository.GetCiudad(nombre);

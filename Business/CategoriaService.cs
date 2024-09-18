@@ -16,6 +16,12 @@ namespace Buscador.Business
         }
 
         public List<Categoria> GetAll() => _categoriaRepository.GetAll();
+
+        public GetCategoriaDTO GetCategoriaId(int idCategoria)
+        {
+            return _categoriaRepository.GetCategoriaId(idCategoria);
+        }
+
         public GetCategoriaDTO GetCategoria(string nombre)
         {
             var categoria = _categoriaRepository.GetCategoria(nombre);
@@ -31,7 +37,8 @@ namespace Buscador.Business
             _categoriaRepository.UpdateCategoria(categoriaDTO);
 
         }
-        public void DeleteCategoria(int idCategoria){
+        public void DeleteCategoria(int idCategoria)
+        {
             _categoriaRepository.DeleteCategoria(idCategoria);
         }
 
