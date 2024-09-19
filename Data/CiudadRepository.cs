@@ -1,6 +1,7 @@
 using Buscador.Models;
 using System.Text;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Buscador.Data
 {
@@ -81,6 +82,37 @@ namespace Buscador.Data
 
             return ciudadaDTO;
         }
+
+        public GetEmpresaCiudadDTO GetEmpresasCiudad(int id)
+        {
+            var ciudad = _context.Ciudadades
+                .Include(c => c.EmpresasCiudades)
+                .ThenInclude(ec => ec.Empresa)
+                .FirstOrDefault(c => c.IdCiudad == id);
+
+            if (ciudad is null)
+            {
+                throw new Exception($"Ciudad con ID {id} no encontrada.");
+            }
+
+            var ciudadDTO = new GetEmpresaCiudadDTO
+            {
+                IdCiudad = ciudad.IdCiudad,
+                Nombre = ciudad.Nombre,
+                EmpresasCiudades = ciudad.EmpresasCiudades.Select(ec => new NameEmpresaCiudadDTO
+                {
+                    IdEmpresaCiudad = ec.IdEmpresaCiudad,
+                    Empresa = new NameEmpresaDTO
+                    {
+                        IdEmpresa = ec.Empresa.IdEmpresa,
+                        Nombre = ec.Empresa.Nombre
+                    }
+                }).ToList()
+            };
+
+            return ciudadDTO;
+        }
+
         //Create 
 
         public Ciudad CreateCiudad(CiudadDTO ciudad)

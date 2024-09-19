@@ -16,6 +16,7 @@ namespace Buscador.Business
         }
 
 
+        //GET
         public List<Ciudad> GetAll()
         {
             return _ciudadRepository.GetAll();
@@ -32,14 +33,24 @@ namespace Buscador.Business
         {
             return _ciudadRepository.GetCiudad(nombre);
         }
+        public GetEmpresaCiudadDTO GetEmpresasCiudad(int id)
+        {
+            return _ciudadRepository.GetEmpresasCiudad(id);
+        }
+
+        //Create
         public Ciudad CreateCiudad(CiudadDTO ciudad)
         {
             return _ciudadRepository.CreateCiudad(ciudad);
         }
+
+        //Put
         public void UpdateCiudad(CiudadDTO ciudadDTO)
         {
             _ciudadRepository.UpdateCiudad(ciudadDTO);
         }
+
+        //Delete
         public void DeleteCiudad(int idCiudad)
         {
             _ciudadRepository.DeleteCiudad(idCiudad);

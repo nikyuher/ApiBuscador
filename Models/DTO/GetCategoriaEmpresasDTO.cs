@@ -9,6 +9,5 @@ public class GetCategoriaEmpresasDTO
     [Required]
     public string? Nombre { get; set; }
 
- // Relación muchos a muchos
     public List<EmpresasCategoriaDTO>? EmpresaCategorias { get; set; }
 }
