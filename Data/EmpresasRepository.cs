@@ -82,6 +82,28 @@ namespace Buscador.Data
             return newCategoriaEmpresa;
         }
 
+        public EmpresaCiudad AddCiudadEmpresa(EmpresaCiudadDTO empresaCiudad)
+        {
+            var existingCiudadEmpresa = _context.EmpresasCiudades
+                .FirstOrDefault(ec => ec.IdCiudad == empresaCiudad.IdCiudad && ec.IdEmpresa == empresaCiudad.IdEmpresa);
+
+            if (existingCiudadEmpresa != null)
+            {
+                throw new Exception("La empresa ya está asociada a esta ciudad.");
+            }
+
+            var newCiudadEmpresa = new EmpresaCiudad
+            {
+                IdCiudad = empresaCiudad.IdCiudad,
+                IdEmpresa = empresaCiudad.IdEmpresa
+            };
+
+            _context.EmpresasCiudades.Add(newCiudadEmpresa);
+            _context.SaveChanges();
+
+            return newCiudadEmpresa;
+        }
+
         //Update
         public void Update(Empresa empresa)
         {
@@ -113,7 +135,7 @@ namespace Buscador.Data
 
             if (empresa is null)
             {
-                throw new Exception("La empresa ya no existe.");
+                throw new Exception("La empresa puesta ya no existe.");
             }
 
             var existingCategoriaEmpresa = _context.EmpresaCategorias
@@ -125,6 +147,28 @@ namespace Buscador.Data
             }
 
             _context.EmpresaCategorias.Remove(existingCategoriaEmpresa);
+            _context.SaveChanges();
+        }
+
+        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad)
+        {
+
+            var empresa = _context.Empresas.Find(empresaCiudad.IdEmpresa);
+
+            if (empresa is null)
+            {
+                throw new Exception("La empresa puesta no existe.");
+            }
+
+            var existingCiudadEmpresa = _context.EmpresasCiudades
+                .FirstOrDefault(ec => ec.IdCiudad == empresaCiudad.IdCiudad && ec.IdEmpresa == empresaCiudad.IdEmpresa);
+
+            if (existingCiudadEmpresa is null)
+            {
+                throw new Exception("La empresa ya no esta asociada a esa ciudad.");
+            }
+
+            _context.EmpresasCiudades.Remove(existingCiudadEmpresa);
             _context.SaveChanges();
         }
 

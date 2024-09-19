@@ -11,11 +11,13 @@ namespace Buscador.Data
         //Post
         Empresa GetById(int id);
         public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
+        public EmpresaCiudad AddCiudadEmpresa(EmpresaCiudadDTO empresaCiudad);
         public Empresa Add(AddEmpresaDTO empresa);
         //Put
         void Update(Empresa empresa);
         //Delete
         void Delete(int id);
         public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
+        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad);
     }
 }

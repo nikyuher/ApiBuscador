@@ -19,7 +19,7 @@ namespace Buscador.Api.Controllers
 
 
         //Get
-        [HttpGet]
+        [HttpGet(Name = "GetAllEmpresas")]
         public ActionResult<List<Empresa>> GetAll()
         {
             try
@@ -49,7 +49,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetIdEmpresa")]
         public ActionResult<Empresa> GetById([FromBody] int id)
         {
 
@@ -70,7 +70,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Create
-        [HttpPost]
+        [HttpPost(Name = "CreateEmpresa")]
         public ActionResult<Empresa> Create([FromBody] AddEmpresaDTO empresa)
         {
             try
@@ -106,10 +106,28 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [HttpPost("ciudad", Name = "AddCiudadEmpresa")]
+        public ActionResult<EmpresaCiudad> AddCiudadEmpresa([FromBody] EmpresaCiudadDTO empresaCiudad)
+        {
+            try
+            {
+                if (empresaCiudad == null)
+                {
+                    return BadRequest();
+                }
+                _empresaService.AddCiudadEmpresa(empresaCiudad);
+                return Ok(empresaCiudad);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         //Put
 
-        [HttpPut("{id}")]
-        public IActionResult Update( int id, [FromBody] Empresa empresa)
+        [HttpPut("{id}", Name = "UpdateEmpresa")]
+        public IActionResult Update(int id, [FromBody] Empresa empresa)
         {
 
             try
@@ -136,7 +154,7 @@ namespace Buscador.Api.Controllers
 
 
         //Delete
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "DeleteEmpresa")]
         public IActionResult Delete([FromBody] int id)
         {
             try
@@ -156,13 +174,28 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpDelete("categoria")]
+        [HttpDelete("categoria", Name = "DeleteCategoriaEmpresa")]
         public IActionResult DeleteCategoriaEmpresa([FromBody] AddEmpresaCategoriaDTO empresaCategoria)
         {
             try
             {
 
                 _empresaService.DeleteCategoriaEmpresa(empresaCategoria);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("ciudad", Name = "DeleteCiudadEmpresa")]
+        public IActionResult DeleteCiudadEmpresa([FromBody] EmpresaCiudadDTO empresaCiudad)
+        {
+            try
+            {
+
+                _empresaService.DeleteCiudadEmpresa(empresaCiudad);
                 return Ok();
             }
             catch (Exception ex)
