@@ -37,7 +37,7 @@ namespace Buscador.Business
         }
 
         //Update
-        public void Update(Empresa empresa) => _empresaRepository.Update(empresa);
+        public void Update(PutDatosEmpresaDTO empresa) => _empresaRepository.Update(empresa);
 
 
         //Delete

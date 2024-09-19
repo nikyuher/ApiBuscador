@@ -15,7 +15,7 @@ namespace Buscador.Data
         public EmpresaCiudad AddCiudadEmpresa(EmpresaCiudadDTO empresaCiudad);
         public Empresa Add(AddEmpresaDTO empresa);
         //Put
-        void Update(Empresa empresa);
+        void Update(PutDatosEmpresaDTO empresa);
         //Delete
         void Delete(int id);
         public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);

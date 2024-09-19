@@ -127,7 +127,7 @@ namespace Buscador.Api.Controllers
         //Put
 
         [HttpPut("{id}", Name = "UpdateEmpresa")]
-        public IActionResult Update(int id, [FromBody] Empresa empresa)
+        public IActionResult Update(int id, [FromBody] PutDatosEmpresaDTO empresa)
         {
 
             try

@@ -105,10 +105,24 @@ namespace Buscador.Data
         }
 
         //Update
-        public void Update(Empresa empresa)
+        public void Update(PutDatosEmpresaDTO empresaDto)
         {
-            _context.Entry(empresa).State = EntityState.Modified;
-            _context.SaveChanges();
+            var existingEmpresa = _context.Empresas.FirstOrDefault(e => e.IdEmpresa == empresaDto.IdEmpresa);
+
+            if (existingEmpresa != null)
+            {
+                existingEmpresa.Nombre = empresaDto.Nombre;
+                existingEmpresa.Descripcion = empresaDto.Descripcion;
+                existingEmpresa.Direccion = empresaDto.Direccion;
+                existingEmpresa.Imagen = empresaDto.Imagen;
+
+                _context.Entry(existingEmpresa).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("La empresa no existe");
+            }
         }
 
 
