@@ -23,9 +23,9 @@ namespace Buscador.Api.Controllers
             return Ok(ciudades);
         }
 
-        [HttpGet("id/{idCiudad}", Name = "GetCiudadId")]
+        [HttpGet("{idCiudad}", Name = "GetCiudadId")]
 
-        public ActionResult<CiudadDTO> GetCiudadId([FromQuery] int idCiudad)
+        public ActionResult<CiudadDTO> GetCiudadId([FromRoute] int idCiudad)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpGet("{nombre}", Name = "GetCiudad")]
+        [HttpGet("nombre", Name = "GetCiudad")]
 
         public ActionResult<CiudadDTO> GetCiudad([FromQuery] string nombre)
         {
@@ -113,9 +113,9 @@ namespace Buscador.Api.Controllers
         }
 
         //Delete
-        [HttpDelete(Name = "DeleteCiudad")]
+        [HttpDelete("{idCiudad}", Name = "DeleteCiudad")]
 
-        public ActionResult DeleteCiudad([FromBody] int idCiudad)
+        public ActionResult DeleteCiudad([FromRoute] int idCiudad)
         {
 
             try

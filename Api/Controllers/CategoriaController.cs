@@ -32,9 +32,9 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpGet("id/{idCategoria}", Name = "GetCategoriaId")]
+        [HttpGet("{idCategoria}", Name = "GetCategoriaId")]
 
-        public ActionResult<GetCategoriaDTO> GetCategoriaId([FromQuery] int idCategoria)
+        public ActionResult<GetCategoriaDTO> GetCategoriaId([FromRoute] int idCategoria)
         {
             try
             {
@@ -50,9 +50,8 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpGet("id={idCategoria}/empresas", Name = "GetEmpresasCategoria")]
-
-        public ActionResult<GetCategoriaEmpresasDTO> GetEmpresasCategoria([FromQuery] int idCategoria)
+        [HttpGet("{idCategoria}/empresas", Name = "GetEmpresasCategoria")]
+        public ActionResult<GetCategoriaEmpresasDTO> GetEmpresasCategoria([FromRoute] int idCategoria)
         {
             try
             {
@@ -68,7 +67,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpGet("{nombre}", Name = "GetCategoria")]
+        [HttpGet("nombre", Name = "GetCategoria")]
 
         public ActionResult<GetCategoriaDTO> GetCategoria([FromQuery] string nombre)
         {
@@ -126,9 +125,9 @@ namespace Buscador.Api.Controllers
         }
 
         //Delete
-        [HttpDelete(Name = "DeleteCategoria")]
+        [HttpDelete("{idCategoria}",Name = "DeleteCategoria")]
 
-        public ActionResult DeleteCategoria([FromQuery] int idCategoria)
+        public ActionResult DeleteCategoria([FromRoute] int idCategoria)
         {
 
             try
