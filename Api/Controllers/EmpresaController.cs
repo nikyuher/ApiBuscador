@@ -34,7 +34,7 @@ namespace Buscador.Api.Controllers
         }
 
         [HttpGet("buscar", Name = "BuscadorEmpresaNombre")]
-        public ActionResult<List<Empresa>> BuscadorEmpresaNombre([FromBody] string nombre)
+        public ActionResult<List<Empresa>> BuscadorEmpresaNombre([FromQuery] string nombre)
         {
 
             try
@@ -50,7 +50,7 @@ namespace Buscador.Api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetIdEmpresa")]
-        public ActionResult<Empresa> GetById([FromBody] int id)
+        public ActionResult<Empresa> GetById([FromQuery] int id)
         {
 
             try
@@ -127,7 +127,7 @@ namespace Buscador.Api.Controllers
         //Put
 
         [HttpPut("{id}", Name = "UpdateEmpresa")]
-        public IActionResult Update(int id, [FromBody] PutDatosEmpresaDTO empresa)
+        public IActionResult Update([FromQuery] int id, [FromBody] PutDatosEmpresaDTO empresa)
         {
 
             try
@@ -155,7 +155,7 @@ namespace Buscador.Api.Controllers
 
         //Delete
         [HttpDelete("{id}", Name = "DeleteEmpresa")]
-        public IActionResult Delete([FromBody] int id)
+        public IActionResult Delete([FromQuery] int id)
         {
             try
             {

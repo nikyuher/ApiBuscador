@@ -25,7 +25,7 @@ namespace Buscador.Api.Controllers
 
         [HttpGet("id/{idCiudad}", Name = "GetCiudadId")]
 
-        public ActionResult<CiudadDTO> GetCiudadId(int idCiudad)
+        public ActionResult<CiudadDTO> GetCiudadId([FromQuery] int idCiudad)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Buscador.Api.Controllers
         }
 
         [HttpGet("buscar", Name = "GetCiudadNombre")]
-        public ActionResult<List<CiudadDTO>> GetCiudadNombre(string nombre)
+        public ActionResult<List<CiudadDTO>> GetCiudadNombre([FromQuery] string nombre)
         {
 
             try
@@ -59,7 +59,7 @@ namespace Buscador.Api.Controllers
 
         [HttpGet("{nombre}", Name = "GetCiudad")]
 
-        public ActionResult<CiudadDTO> GetCiudad(string nombre)
+        public ActionResult<CiudadDTO> GetCiudad([FromQuery] string nombre)
         {
             try
             {
