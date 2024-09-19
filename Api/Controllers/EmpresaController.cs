@@ -17,15 +17,24 @@ namespace Buscador.Api.Controllers
             _empresaService = empresaService;
         }
 
+
+        //Get
         [HttpGet]
         public ActionResult<List<Empresa>> GetAll()
         {
-            var empresas = _empresaService.GetAll();
-            return Ok(empresas);
+            try
+            {
+                var empresas = _empresaService.GetAll();
+                return Ok(empresas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
-        [HttpGet("buscar",Name = "BuscadorEmpresaNombre")]
-        public ActionResult<List<Empresa>> BuscadorEmpresaNombre(string nombre)
+        [HttpGet("buscar", Name = "BuscadorEmpresaNombre")]
+        public ActionResult<List<Empresa>> BuscadorEmpresaNombre([FromBody] string nombre)
         {
 
             try
@@ -41,56 +50,125 @@ namespace Buscador.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Empresa> GetById(int id)
+        public ActionResult<Empresa> GetById([FromBody] int id)
         {
-            var empresa = _empresaService.GetById(id);
-            if (empresa == null)
+
+            try
             {
-                return NotFound();
+                var empresa = _empresaService.GetById(id);
+                if (empresa == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(empresa);
             }
-            return Ok(empresa);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+
         }
 
+        //Create
         [HttpPost]
-        public ActionResult<Empresa> Create(AddEmpresaDTO empresa)
+        public ActionResult<Empresa> Create([FromBody] AddEmpresaDTO empresa)
         {
-            if (empresa == null)
+            try
             {
-                return BadRequest();
+                if (empresa == null)
+                {
+                    return BadRequest();
+                }
+                _empresaService.Add(empresa);
+                return Ok(empresa);
             }
-            _empresaService.Add(empresa);
-            return Ok(empresa);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
+
+        [HttpPost("categoria", Name = "AddCategoriaEmpresa")]
+        public ActionResult<EmpresaCategoria> AddCategoriaEmpresa([FromBody] AddEmpresaCategoriaDTO empresaCategoria)
+        {
+            try
+            {
+                if (empresaCategoria == null)
+                {
+                    return BadRequest();
+                }
+                _empresaService.AddCategoriaEmpresa(empresaCategoria);
+                return Ok(empresaCategoria);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        //Put
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Empresa empresa)
+        public IActionResult Update( int id, [FromBody] Empresa empresa)
         {
-            if (id != empresa.IdEmpresa)
-            {
-                return BadRequest();
-            }
 
-            var existingEmpresa = _empresaService.GetById(id);
-            if (existingEmpresa == null)
+            try
             {
-                return NotFound();
-            }
+                if (id != empresa.IdEmpresa)
+                {
+                    return BadRequest();
+                }
 
-            _empresaService.Update(empresa);
-            return NoContent();
+                var existingEmpresa = _empresaService.GetById(id);
+                if (existingEmpresa == null)
+                {
+                    return BadRequest();
+                }
+
+                _empresaService.Update(empresa);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var empresa = _empresaService.GetById(id);
-            if (empresa == null)
-            {
-                return NotFound();
-            }
 
-            _empresaService.Delete(id);
-            return NoContent();
+        //Delete
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromBody] int id)
+        {
+            try
+            {
+                var empresa = _empresaService.GetById(id);
+                if (empresa == null)
+                {
+                    return BadRequest();
+                }
+
+                _empresaService.Delete(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("categoria")]
+        public IActionResult DeleteCategoriaEmpresa([FromBody] AddEmpresaCategoriaDTO empresaCategoria)
+        {
+            try
+            {
+
+                _empresaService.DeleteCategoriaEmpresa(empresaCategoria);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 }

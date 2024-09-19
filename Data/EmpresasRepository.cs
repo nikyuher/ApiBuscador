@@ -62,12 +62,23 @@ namespace Buscador.Data
 
         public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
         {
+            var existingCategoriaEmpresa = _context.EmpresaCategorias
+                .FirstOrDefault(ec => ec.IdCategoria == empresaCategoria.IdCategoria && ec.IdEmpresa == empresaCategoria.IdEmpresa);
+
+            if (existingCategoriaEmpresa != null)
+            {
+                throw new Exception("La empresa ya está asociada a esta categoría.");
+            }
 
             var newCategoriaEmpresa = new EmpresaCategoria
             {
                 IdCategoria = empresaCategoria.IdCategoria,
                 IdEmpresa = empresaCategoria.IdEmpresa
             };
+
+            _context.EmpresaCategorias.Add(newCategoriaEmpresa);
+            _context.SaveChanges();
+
             return newCategoriaEmpresa;
         }
 
@@ -82,12 +93,39 @@ namespace Buscador.Data
         //Delete
         public void Delete(int id)
         {
+
             var empresa = _context.Empresas.Find(id);
             if (empresa != null)
             {
                 _context.Empresas.Remove(empresa);
                 _context.SaveChanges();
             }
+            else
+            {
+                throw new Exception("La empresa solicitada no existe.");
+            }
+        }
+
+        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        {
+
+            var empresa = _context.Empresas.Find(empresaCategoria.IdEmpresa);
+
+            if (empresa is null)
+            {
+                throw new Exception("La empresa ya no existe.");
+            }
+
+            var existingCategoriaEmpresa = _context.EmpresaCategorias
+                .FirstOrDefault(ec => ec.IdCategoria == empresaCategoria.IdCategoria && ec.IdEmpresa == empresaCategoria.IdEmpresa);
+
+            if (existingCategoriaEmpresa is null)
+            {
+                throw new Exception("La empresa ya no esta asociada a esa categoria.");
+            }
+
+            _context.EmpresaCategorias.Remove(existingCategoriaEmpresa);
+            _context.SaveChanges();
         }
 
         // Método para quitar acentos

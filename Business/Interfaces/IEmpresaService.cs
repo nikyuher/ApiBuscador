@@ -17,5 +17,6 @@ namespace Buscador.Data
         void Update(Empresa empresa);
         //Delete
         void Delete(int id);
+        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
     }
 }

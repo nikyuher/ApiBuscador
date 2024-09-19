@@ -29,5 +29,9 @@ namespace Buscador.Business
         public void Update(Empresa empresa) => _empresaRepository.Update(empresa);
 
         public void Delete(int id) => _empresaRepository.Delete(id);
+        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        {
+            _empresaRepository.DeleteCategoriaEmpresa(empresaCategoria);
+        }
     }
 }
