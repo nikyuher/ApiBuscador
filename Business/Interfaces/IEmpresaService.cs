@@ -6,11 +6,19 @@ namespace Buscador.Data
 {
     public interface IEmpresaService
     {
+        //Get
         List<Empresa> GetAll();
         public List<Empresa> BuscadorEmpresaNombre(string nombre);
+        //Post
         Empresa GetById(int id);
-        Empresa Add(AddEmpresaDTO empresa);
-        void Update(Empresa empresa);
+        public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
+        public EmpresaCiudad AddCiudadEmpresa(EmpresaCiudadDTO empresaCiudad);
+        public Empresa Add(AddEmpresaDTO empresa);
+        //Put
+        void Update(PutDatosEmpresaDTO empresa);
+        //Delete
         void Delete(int id);
+        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
+        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad);
     }
 }

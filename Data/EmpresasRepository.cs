@@ -14,6 +14,7 @@ namespace Buscador.Data
             _context = context;
         }
 
+        //Get
         public List<Empresa> GetAll()
         {
             return _context.Empresas.ToList();
@@ -21,12 +22,10 @@ namespace Buscador.Data
 
         public List<Empresa> BuscadorEmpresaNombre(string nombre)
         {
-            // Normalizar y quitar acentos del término de búsqueda
             var normalizedNombre = RemoveDiacritics(nombre.ToLower());
 
-            // Consultar todas las empresas
             var empresas = _context.Empresas
-                .AsEnumerable() // Cambia la consulta a cliente para usar RemoveDiacritics
+                .AsEnumerable()
                 .Where(e => RemoveDiacritics(e.Nombre.ToLower()).Contains(normalizedNombre))
                 .OrderBy(e => RemoveDiacritics(e.Nombre.ToLower()).IndexOf(normalizedNombre))
                 .ToList();
@@ -39,12 +38,12 @@ namespace Buscador.Data
             return empresas;
         }
 
-
         public Empresa GetById(int id)
         {
             return _context.Empresas.Find(id);
         }
 
+        //Post
         public Empresa Add(AddEmpresaDTO empresa)
         {
             var newEmpresa = new Empresa
@@ -56,26 +55,135 @@ namespace Buscador.Data
             };
             _context.Empresas.Add(newEmpresa);
 
-
             _context.SaveChanges();
 
             return newEmpresa;
         }
 
-        public void Update(Empresa empresa)
+        public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
         {
-            _context.Entry(empresa).State = EntityState.Modified;
+            var existingCategoriaEmpresa = _context.EmpresaCategorias
+                .FirstOrDefault(ec => ec.IdCategoria == empresaCategoria.IdCategoria && ec.IdEmpresa == empresaCategoria.IdEmpresa);
+
+            if (existingCategoriaEmpresa != null)
+            {
+                throw new Exception("La empresa ya está asociada a esta categoría.");
+            }
+
+            var newCategoriaEmpresa = new EmpresaCategoria
+            {
+                IdCategoria = empresaCategoria.IdCategoria,
+                IdEmpresa = empresaCategoria.IdEmpresa
+            };
+
+            _context.EmpresaCategorias.Add(newCategoriaEmpresa);
             _context.SaveChanges();
+
+            return newCategoriaEmpresa;
         }
 
+        public EmpresaCiudad AddCiudadEmpresa(EmpresaCiudadDTO empresaCiudad)
+        {
+            var existingCiudadEmpresa = _context.EmpresasCiudades
+                .FirstOrDefault(ec => ec.IdCiudad == empresaCiudad.IdCiudad && ec.IdEmpresa == empresaCiudad.IdEmpresa);
+
+            if (existingCiudadEmpresa != null)
+            {
+                throw new Exception("La empresa ya está asociada a esta ciudad.");
+            }
+
+            var newCiudadEmpresa = new EmpresaCiudad
+            {
+                IdCiudad = empresaCiudad.IdCiudad,
+                IdEmpresa = empresaCiudad.IdEmpresa
+            };
+
+            _context.EmpresasCiudades.Add(newCiudadEmpresa);
+            _context.SaveChanges();
+
+            return newCiudadEmpresa;
+        }
+
+        //Update
+        public void Update(PutDatosEmpresaDTO empresaDto)
+        {
+            var existingEmpresa = _context.Empresas.FirstOrDefault(e => e.IdEmpresa == empresaDto.IdEmpresa);
+
+            if (existingEmpresa != null)
+            {
+                existingEmpresa.Nombre = empresaDto.Nombre;
+                existingEmpresa.Descripcion = empresaDto.Descripcion;
+                existingEmpresa.Direccion = empresaDto.Direccion;
+                existingEmpresa.Imagen = empresaDto.Imagen;
+
+                _context.Entry(existingEmpresa).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("La empresa no existe");
+            }
+        }
+
+
+        //Delete
         public void Delete(int id)
         {
+
             var empresa = _context.Empresas.Find(id);
             if (empresa != null)
             {
                 _context.Empresas.Remove(empresa);
                 _context.SaveChanges();
             }
+            else
+            {
+                throw new Exception("La empresa solicitada no existe.");
+            }
+        }
+
+        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        {
+
+            var empresa = _context.Empresas.Find(empresaCategoria.IdEmpresa);
+
+            if (empresa is null)
+            {
+                throw new Exception("La empresa puesta ya no existe.");
+            }
+
+            var existingCategoriaEmpresa = _context.EmpresaCategorias
+                .FirstOrDefault(ec => ec.IdCategoria == empresaCategoria.IdCategoria && ec.IdEmpresa == empresaCategoria.IdEmpresa);
+
+            if (existingCategoriaEmpresa is null)
+            {
+                throw new Exception("La empresa ya no esta asociada a esa categoria.");
+            }
+
+            _context.EmpresaCategorias.Remove(existingCategoriaEmpresa);
+            _context.SaveChanges();
+        }
+
+        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad)
+        {
+
+            var empresa = _context.Empresas.Find(empresaCiudad.IdEmpresa);
+
+            if (empresa is null)
+            {
+                throw new Exception("La empresa puesta no existe.");
+            }
+
+            var existingCiudadEmpresa = _context.EmpresasCiudades
+                .FirstOrDefault(ec => ec.IdCiudad == empresaCiudad.IdCiudad && ec.IdEmpresa == empresaCiudad.IdEmpresa);
+
+            if (existingCiudadEmpresa is null)
+            {
+                throw new Exception("La empresa ya no esta asociada a esa ciudad.");
+            }
+
+            _context.EmpresasCiudades.Remove(existingCiudadEmpresa);
+            _context.SaveChanges();
         }
 
         // Método para quitar acentos
