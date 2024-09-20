@@ -169,32 +169,6 @@ namespace Buscador.Data.Migrations
                     { 16, "Una de las mayores marcas de moda del mundo.", "Av. de la Diputación, 15142 Arteijo, La Coruña", "https://ik.imagekit.io/Mariocanizares/Empresas/zara.jpg?updatedAt=1726649877219", "Zara" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "EmpresasCiudades",
-                columns: new[] { "IdEmpresaCiudad", "IdCiudad", "IdEmpresa" },
-                values: new object[,]
-                {
-                    { 1, 1, 1 },
-                    { 2, 2, 1 },
-                    { 3, 3, 2 },
-                    { 4, 3, 3 },
-                    { 5, 4, 4 },
-                    { 6, 3, 5 },
-                    { 7, 3, 6 },
-                    { 8, 2, 6 },
-                    { 9, 2, 7 },
-                    { 10, 2, 8 },
-                    { 11, 3, 9 },
-                    { 12, 3, 10 },
-                    { 13, 3, 11 },
-                    { 14, 3, 12 },
-                    { 15, 3, 13 },
-                    { 16, 3, 14 },
-                    { 17, 2, 15 },
-                    { 18, 1, 30 },
-                    { 19, 2, 30 }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_EmpresaCategorias_IdCategoria",
                 table: "EmpresaCategorias",

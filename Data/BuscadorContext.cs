@@ -87,27 +87,27 @@ public class BuscadorContext : DbContext
 );
 
 // Semilla de datos para relaciones entre empresas y ciudades
-modelBuilder.Entity<EmpresaCiudad>().HasData(
-    new EmpresaCiudad { IdEmpresaCiudad = 1, IdEmpresa = 1, IdCiudad = 1 }, // Inditex en La Coruña
-    new EmpresaCiudad { IdEmpresaCiudad = 2, IdEmpresa = 1, IdCiudad = 2 }, // Inditex también en Barcelona
-    new EmpresaCiudad { IdEmpresaCiudad = 3, IdEmpresa = 2, IdCiudad = 3 }, // Banco Santander en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 4, IdEmpresa = 3, IdCiudad = 3 }, // Telefónica en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 5, IdEmpresa = 4, IdCiudad = 4 }, // Iberdrola en Bilbao
-    new EmpresaCiudad { IdEmpresaCiudad = 6, IdEmpresa = 5, IdCiudad = 3 }, // Repsol en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 7, IdEmpresa = 6, IdCiudad = 3 }, // El Corte Inglés en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 8, IdEmpresa = 6, IdCiudad = 2 }, // El Corte Inglés en Barcelona
-    new EmpresaCiudad { IdEmpresaCiudad = 9, IdEmpresa = 7, IdCiudad = 2 }, // CaixaBank en Barcelona
-    new EmpresaCiudad { IdEmpresaCiudad = 10, IdEmpresa = 8, IdCiudad = 2 }, // Seat en Martorell (cerca de Barcelona)
-    new EmpresaCiudad { IdEmpresaCiudad = 11, IdEmpresa = 9, IdCiudad = 3 }, // Aena en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 12, IdEmpresa = 10, IdCiudad = 3 }, // Ferrovial en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 13, IdEmpresa = 11, IdCiudad = 3 }, // Mapfre en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 14, IdEmpresa = 12, IdCiudad = 3 }, // Acciona en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 15, IdEmpresa = 13, IdCiudad = 3 }, // BBVA en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 16, IdEmpresa = 14, IdCiudad = 3 }, // Amadeus en Madrid
-    new EmpresaCiudad { IdEmpresaCiudad = 17, IdEmpresa = 15, IdCiudad = 2 }, // Grifols en Barcelona.
-    new EmpresaCiudad { IdEmpresaCiudad = 18, IdEmpresa = 30, IdCiudad = 1 }, // Zara en La Coruña
-    new EmpresaCiudad { IdEmpresaCiudad = 19, IdEmpresa = 30, IdCiudad = 2 }  // Zara también en Barcelona
-);
+// modelBuilder.Entity<EmpresaCiudad>().HasData(
+//     new EmpresaCiudad { IdEmpresaCiudad = 1, IdEmpresa = 1, IdCiudad = 1 }, // Inditex en La Coruña
+//     new EmpresaCiudad { IdEmpresaCiudad = 2, IdEmpresa = 1, IdCiudad = 2 }, // Inditex también en Barcelona
+//     new EmpresaCiudad { IdEmpresaCiudad = 3, IdEmpresa = 2, IdCiudad = 3 }, // Banco Santander en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 4, IdEmpresa = 3, IdCiudad = 3 }, // Telefónica en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 5, IdEmpresa = 4, IdCiudad = 4 }, // Iberdrola en Bilbao
+//     new EmpresaCiudad { IdEmpresaCiudad = 6, IdEmpresa = 5, IdCiudad = 3 }, // Repsol en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 7, IdEmpresa = 6, IdCiudad = 3 }, // El Corte Inglés en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 8, IdEmpresa = 6, IdCiudad = 2 }, // El Corte Inglés en Barcelona
+//     new EmpresaCiudad { IdEmpresaCiudad = 9, IdEmpresa = 7, IdCiudad = 2 }, // CaixaBank en Barcelona
+//     new EmpresaCiudad { IdEmpresaCiudad = 10, IdEmpresa = 8, IdCiudad = 2 }, // Seat en Martorell (cerca de Barcelona)
+//     new EmpresaCiudad { IdEmpresaCiudad = 11, IdEmpresa = 9, IdCiudad = 3 }, // Aena en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 12, IdEmpresa = 10, IdCiudad = 3 }, // Ferrovial en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 13, IdEmpresa = 11, IdCiudad = 3 }, // Mapfre en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 14, IdEmpresa = 12, IdCiudad = 3 }, // Acciona en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 15, IdEmpresa = 13, IdCiudad = 3 }, // BBVA en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 16, IdEmpresa = 14, IdCiudad = 3 }, // Amadeus en Madrid
+//     new EmpresaCiudad { IdEmpresaCiudad = 17, IdEmpresa = 15, IdCiudad = 2 }, // Grifols en Barcelona.
+//     new EmpresaCiudad { IdEmpresaCiudad = 18, IdEmpresa = 30, IdCiudad = 1 }, // Zara en La Coruña
+//     new EmpresaCiudad { IdEmpresaCiudad = 19, IdEmpresa = 30, IdCiudad = 2 }  // Zara también en Barcelona
+// );
 
 
         base.OnModelCreating(modelBuilder);
