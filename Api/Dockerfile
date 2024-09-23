@@ -25,4 +25,4 @@ COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
 # Usar el script wait-for-it.sh para esperar que la base de datos esté disponible antes de ejecutar la API
-ENTRYPOINT ["/wait-for-it.sh", "db:1433", "--", "dotnet", "Buscador.Api.dll"]
+ENTRYPOINT ["dotnet", "Buscador.Api.dll"]
