@@ -12,6 +12,7 @@ namespace Buscador.Data
         public List<CiudadDTO> BuscadorCiudadNombre(string nombre);
         public CiudadDTO GetCiudad(string nombre);
         public GetEmpresaCiudadDTO GetEmpresasCiudad(int id);
+        public GetEmpresaCiudadDTO GetEmpresaCiudad(int idEmpresa, int idCiudad);
 
         //Create
         public Ciudad CreateCiudad(CiudadDTO ciudad);

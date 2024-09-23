@@ -113,6 +113,60 @@ namespace Buscador.Data
             return ciudadDTO;
         }
 
+        public GetEmpresaCiudadDTO GetEmpresaCiudad(int idEmpresa, int idCiudad)
+        {
+            var ciudad = _context.Ciudadades
+                .Include(c => c.EmpresasCiudades)
+                .ThenInclude(ec => ec.Empresa)
+                .FirstOrDefault(c => c.IdCiudad == idCiudad);
+
+            // Si la ciudad no se encuentra, lanzar excepcio
+            if (ciudad is null)
+            {
+                throw new Exception($"Ciudad con ID {idCiudad} no encontrada.");
+            }
+
+            // Si la empresa no se encuentra, lanzar excepcion
+            var empresa = _context.Empresas.FirstOrDefault(e => e.IdEmpresa == idEmpresa);
+
+            if (empresa is null)
+            {
+                throw new Exception($"Empresa con ID {idEmpresa} no encontrada.");
+            }
+
+            // Buscar si la empresa existe en la ciudad
+            var empresaCiudad = ciudad.EmpresasCiudades
+                .FirstOrDefault(ec => ec.Empresa.IdEmpresa == idEmpresa);
+
+            // Si no se encuentra la empresa en la ciudad, lanzar excepcion o devolver un mensaje
+            if (empresaCiudad is null)
+            {
+                throw new Exception($"No hay ninguna empresa con ID {idEmpresa} en la ciudad con ID {idCiudad}.");
+            }
+
+            // Crear el DTO con la información de la ciudad y la empresa encontrada
+            var ciudadDTO = new GetEmpresaCiudadDTO
+            {
+                IdCiudad = ciudad.IdCiudad,
+                Nombre = ciudad.Nombre,
+                EmpresasCiudades = new List<NameEmpresaCiudadDTO>
+        {
+            new NameEmpresaCiudadDTO
+            {
+                IdEmpresaCiudad = empresaCiudad.IdEmpresaCiudad,
+                Empresa = new NameEmpresaDTO
+                {
+                    IdEmpresa = empresaCiudad.Empresa.IdEmpresa,
+                    Nombre = empresaCiudad.Empresa.Nombre
+                }
+            }
+        }
+            };
+
+            return ciudadDTO;
+        }
+
+
         //Create 
 
         public Ciudad CreateCiudad(CiudadDTO ciudad)

@@ -93,6 +93,22 @@ namespace Buscador.Api.Controllers
         }
 
 
+        [HttpGet("empresa", Name = "GetEmpresaCiudad")]
+        public ActionResult<GetEmpresaCiudadDTO> GetEmpresaCiudad([FromQuery] int idEmpresa, [FromQuery] int idCiudad)
+        {
+            try
+            {
+                var ciudad = _ciudadService.GetEmpresaCiudad(idEmpresa, idCiudad);
+
+                return Ok(ciudad);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
         //Post
         [HttpPost(Name = "AddCiudad")]
 

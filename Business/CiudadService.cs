@@ -37,6 +37,10 @@ namespace Buscador.Business
         {
             return _ciudadRepository.GetEmpresasCiudad(id);
         }
+        public GetEmpresaCiudadDTO GetEmpresaCiudad(int idEmpresa, int idCiudad)
+        {
+            return _ciudadRepository.GetEmpresaCiudad(idEmpresa, idCiudad);
+        }
 
         //Create
         public Ciudad CreateCiudad(CiudadDTO ciudad)
