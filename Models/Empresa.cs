@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Buscador.Models;
 public class Empresa
@@ -16,5 +17,8 @@ public class Empresa
     // Relación muchos a muchos
     public List<EmpresaCategoria>? EmpresaCategorias { get; set; }
     public List<EmpresaCiudad>? EmpresasCiudades { get; set; }
+    
+    [JsonIgnore]
+    public Peticion? Peticion { get; set; }
 
 }

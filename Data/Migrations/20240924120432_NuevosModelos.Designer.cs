@@ -3,6 +3,7 @@ using Buscador.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Buscador.Data.Migrations
 {
     [DbContext(typeof(BuscadorContext))]
-    partial class BuscadorContextModelSnapshot : ModelSnapshot
+    [Migration("20240924120432_NuevosModelos")]
+    partial class NuevosModelos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1183,12 +1185,6 @@ namespace Buscador.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EmpresaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCategoriaEmpresa")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCiudadEmpresa")
                         .HasColumnType("int");
 
                     b.Property<string>("ImagenEmpresaURL")
