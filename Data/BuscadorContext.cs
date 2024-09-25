@@ -24,7 +24,7 @@ public class BuscadorContext : DbContext
         modelBuilder.Entity<Peticion>()
             .HasOne(p => p.Usuario)
             .WithMany(u => u.Peticiones)
-            .HasForeignKey(p => p.UsuarioId);
+            .HasForeignKey(p => p.IdUsuario);
 
         modelBuilder.Entity<EmpresaCategoria>()
                         .HasOne(ec => ec.Empresa)

@@ -30,6 +30,12 @@ builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
 builder.Services.AddScoped<ICiudadService, CiudadService>();
 
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+builder.Services.AddScoped<IPeticionRepository, PeticionRepository>();
+builder.Services.AddScoped<IPeticionService, PeticionService>();
+
 // Agregar controladores y Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

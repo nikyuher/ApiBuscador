@@ -18,10 +18,10 @@ public class Peticion
 
 
     // Relación uno a uno con Empresa
-    public int EmpresaId { get; set; }
+    public int? EmpresaId { get; set; }
     public Empresa? Empresa { get; set; }
 
     // Relación con Usuario (muchos a uno)
-    public int UsuarioId { get; set; }
+    public int IdUsuario { get; set; }
     public Usuario? Usuario { get; set; }
 }

@@ -2,6 +2,7 @@
 using Buscador.Models;
 using System.Text;
 using System.Globalization;
+using System.IO.Compression;
 
 namespace Buscador.Data
 {
@@ -46,6 +47,12 @@ namespace Buscador.Data
         //Post
         public Empresa Add(AddEmpresaDTO empresa)
         {
+
+            if ( _context.Empresas.Any(e => e.Nombre == empresa.Nombre))
+            {
+                throw new Exception($"Ya existe una empresa con el nombre {empresa.Nombre}");
+            }
+
             var newEmpresa = new Empresa
             {
                 Nombre = empresa.Nombre,
