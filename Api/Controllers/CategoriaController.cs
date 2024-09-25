@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
 using Buscador.Data;
 
 namespace Buscador.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CategoriaController : ControllerBase
@@ -16,6 +18,7 @@ namespace Buscador.Api.Controllers
         }
 
         // Get
+        [AllowAnonymous]
         [HttpGet(Name = "GetAll")]
         public ActionResult<List<Categoria>> GetAll()
         {
@@ -32,6 +35,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{idCategoria}", Name = "GetCategoriaId")]
 
         public ActionResult<GetCategoriaDTO> GetCategoriaId([FromRoute] int idCategoria)
@@ -50,6 +54,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{idCategoria}/empresas", Name = "GetEmpresasCategoria")]
         public ActionResult<GetCategoriaEmpresasDTO> GetEmpresasCategoria([FromRoute] int idCategoria)
         {
@@ -67,6 +72,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("nombre", Name = "GetCategoria")]
 
         public ActionResult<GetCategoriaDTO> GetCategoria([FromQuery] string nombre)
@@ -88,6 +94,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Post
+        [Authorize(Roles = "Admin")]
         [HttpPost(Name = "AddCategoria")]
 
         public ActionResult AddCategoria([FromBody] AddCategoriaDTO categoriaDTO)
@@ -106,7 +113,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Update
-
+        [Authorize(Roles = "Admin")]
         [HttpPut(Name = "UpdateCategoria")]
 
         public ActionResult UpdateCategoria([FromBody] UpdateCategoriaDTO categoriaDTO)
@@ -125,7 +132,8 @@ namespace Buscador.Api.Controllers
         }
 
         //Delete
-        [HttpDelete("{idCategoria}",Name = "DeleteCategoria")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{idCategoria}", Name = "DeleteCategoria")]
 
         public ActionResult DeleteCategoria([FromRoute] int idCategoria)
         {

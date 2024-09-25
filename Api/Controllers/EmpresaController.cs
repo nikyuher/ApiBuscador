@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
 using Buscador.Data;
-using Buscador.Business;
-using System.Collections.Generic;
 
 namespace Buscador.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class EmpresaController : ControllerBase
@@ -19,6 +19,7 @@ namespace Buscador.Api.Controllers
 
 
         //Get
+        [AllowAnonymous]
         [HttpGet(Name = "GetAllEmpresas")]
         public ActionResult<List<Empresa>> GetAll()
         {
@@ -33,6 +34,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("buscar", Name = "BuscadorEmpresaNombre")]
         public ActionResult<List<Empresa>> BuscadorEmpresaNombre([FromQuery] string nombre)
         {
@@ -49,6 +51,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}", Name = "GetIdEmpresa")]
         public ActionResult<Empresa> GetById([FromRoute] int id)
         {
@@ -70,6 +73,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Create
+        [Authorize(Roles = "Admin")]
         [HttpPost(Name = "CreateEmpresa")]
         public ActionResult<Empresa> Create([FromBody] AddEmpresaDTO empresa)
         {
@@ -88,6 +92,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("categoria", Name = "AddCategoriaEmpresa")]
         public ActionResult<EmpresaCategoria> AddCategoriaEmpresa([FromBody] AddEmpresaCategoriaDTO empresaCategoria)
         {
@@ -106,6 +111,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("ciudad", Name = "AddCiudadEmpresa")]
         public ActionResult<EmpresaCiudad> AddCiudadEmpresa([FromBody] EmpresaCiudadDTO empresaCiudad)
         {
@@ -126,6 +132,7 @@ namespace Buscador.Api.Controllers
 
         //Put
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}", Name = "UpdateEmpresa")]
         public IActionResult Update([FromRoute] int id, [FromBody] PutDatosEmpresaDTO empresa)
         {
@@ -154,6 +161,7 @@ namespace Buscador.Api.Controllers
 
 
         //Delete
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}", Name = "DeleteEmpresa")]
         public IActionResult Delete([FromRoute] int id)
         {
@@ -174,6 +182,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("categoria", Name = "DeleteCategoriaEmpresa")]
         public IActionResult DeleteCategoriaEmpresa([FromBody] AddEmpresaCategoriaDTO empresaCategoria)
         {
@@ -189,6 +198,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("ciudad", Name = "DeleteCiudadEmpresa")]
         public IActionResult DeleteCiudadEmpresa([FromBody] EmpresaCiudadDTO empresaCiudad)
         {

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
 using Buscador.Data;
 
 namespace Buscador.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CiudadController : ControllerBase
@@ -16,6 +18,7 @@ namespace Buscador.Api.Controllers
         }
 
         // Get
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<Ciudad>> GetAll()
         {
@@ -23,6 +26,7 @@ namespace Buscador.Api.Controllers
             return Ok(ciudades);
         }
 
+        [AllowAnonymous]
         [HttpGet("{idCiudad}", Name = "GetCiudadId")]
 
         public ActionResult<CiudadDTO> GetCiudadId([FromRoute] int idCiudad)
@@ -41,6 +45,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("buscar", Name = "GetCiudadNombre")]
         public ActionResult<List<CiudadDTO>> GetCiudadNombre([FromQuery] string nombre)
         {
@@ -57,6 +62,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("nombre", Name = "GetCiudad")]
 
         public ActionResult<CiudadDTO> GetCiudad([FromQuery] string nombre)
@@ -75,6 +81,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{idCiudad}/empresas", Name = "GetEmpresasCiudad")]
         public ActionResult<GetEmpresaCiudadDTO> GetEmpresasCiudad([FromRoute] int idCiudad)
         {
@@ -93,6 +100,7 @@ namespace Buscador.Api.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet("empresa", Name = "GetEmpresaCiudad")]
         public ActionResult<GetEmpresaCiudadDTO> GetEmpresaCiudad([FromQuery] int idEmpresa, [FromQuery] int idCiudad)
         {
@@ -110,6 +118,7 @@ namespace Buscador.Api.Controllers
 
 
         //Post
+        [Authorize(Roles = "Admin")]
         [HttpPost(Name = "AddCiudad")]
 
         public ActionResult AddCiudad([FromBody] CiudadDTO ciudadDTO)
@@ -129,6 +138,7 @@ namespace Buscador.Api.Controllers
 
         //Update
 
+        [Authorize(Roles = "Admin")]
         [HttpPut(Name = "UpdateCiudad")]
 
         public ActionResult UpdateCiudad([FromBody] CiudadDTO ciudadDTO)
@@ -147,6 +157,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Delete
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{idCiudad}", Name = "DeleteCiudad")]
 
         public ActionResult DeleteCiudad([FromRoute] int idCiudad)

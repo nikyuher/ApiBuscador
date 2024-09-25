@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
 using Buscador.Data;
 
 namespace Buscador.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PeticionController : ControllerBase
@@ -16,6 +18,7 @@ namespace Buscador.Api.Controllers
         }
 
         // Get
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<List<PeticionDTO>> GetAll()
         {
@@ -41,7 +44,8 @@ namespace Buscador.Api.Controllers
             }
         }
 
-        [HttpPost("validar",Name = "AceptarPeticion")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost("validar", Name = "AceptarPeticion")]
 
         public ActionResult AceptarPeticion([FromBody] int peticionId)
         {

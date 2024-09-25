@@ -1,21 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 using Buscador.Models;
 using Buscador.Data;
 
 namespace Buscador.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IAuthService _authService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IAuthService authService)
         {
             _usuarioService = usuarioService;
+            _authService = authService;
         }
 
         // Get
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<List<UsuarioDTO>> GetAll()
         {
@@ -23,6 +29,7 @@ namespace Buscador.Api.Controllers
             return Ok(usuarios);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{idUsuario}", Name = "GetUsuarioId")]
 
         public ActionResult<UsuarioDTO> GetUsuarioId([FromRoute] int idUsuario)
@@ -41,6 +48,7 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("login", Name = "LoginUsuario")]
         public ActionResult<Usuario> LoginUsuario([FromQuery] LoginUsuarioDTO loginUsuario)
         {
@@ -49,7 +57,9 @@ namespace Buscador.Api.Controllers
             {
 
                 var usuario = _usuarioService.LoginUsuario(loginUsuario);
-                return Ok(usuario);
+                var token = _authService.GenerateJwtToken(usuario);
+
+                return Ok(new { token });
             }
             catch (Exception ex)
             {
@@ -58,6 +68,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Post
+        [AllowAnonymous]
         [HttpPost(Name = "RegisterUsuario")]
 
         public ActionResult RegisterUsuario([FromBody] RegisterUsuarioDTO user)
@@ -67,7 +78,9 @@ namespace Buscador.Api.Controllers
             {
 
                 var usuario = _usuarioService.RegisterUsuario(user);
-                return Ok(usuario);
+                var token = _authService.GenerateJwtToken(usuario);
+
+                return Ok(new { token });
             }
             catch (Exception ex)
             {
