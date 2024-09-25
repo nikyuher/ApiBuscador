@@ -108,6 +108,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Delete
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{idUsuario}", Name = "DeleteUsuario")]
 
         public ActionResult DeleteUsuario([FromRoute] int idUsuario)

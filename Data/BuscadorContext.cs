@@ -14,11 +14,6 @@ public class BuscadorContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configuración de la relación uno a uno entre Peticion y Empresa
-        modelBuilder.Entity<Peticion>()
-            .HasOne(p => p.Empresa)
-            .WithOne(e => e.Peticion)
-            .HasForeignKey<Peticion>(p => p.EmpresaId);
 
         // Configuración de la relación uno a muchos entre Usuario y Peticion
         modelBuilder.Entity<Peticion>()

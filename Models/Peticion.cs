@@ -16,11 +16,6 @@ public class Peticion
     public int IdCategoriaEmpresa { get; set; }
     public int IdCiudadEmpresa { get; set; }
 
-
-    // Relación uno a uno con Empresa
-    public int? EmpresaId { get; set; }
-    public Empresa? Empresa { get; set; }
-
     // Relación con Usuario (muchos a uno)
     public int IdUsuario { get; set; }
     public Usuario? Usuario { get; set; }

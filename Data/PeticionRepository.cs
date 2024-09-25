@@ -27,8 +27,8 @@ namespace Buscador.Data
                 IdUsuario = peticion.IdUsuario,
                 DatosUsuario = new DatosUsuarioDTO
                 {
-                    Nombre = peticion.Usuario.Nombre,
-                    Correo = peticion.Usuario.Correo
+                    Nombre = peticion.Usuario?.Nombre,
+                    Correo = peticion.Usuario?.Correo
                 },
                 NombreEmpresa = peticion.NombreEmpresa,
                 DescripcionEmpresa = peticion.DescripcionEmpresa,

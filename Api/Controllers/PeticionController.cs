@@ -27,6 +27,7 @@ namespace Buscador.Api.Controllers
         }
 
         //Post
+        [Authorize(Roles = "User")]
         [HttpPost(Name = "AddPeticion")]
 
         public ActionResult AddPeticion([FromBody] AddPeticionDTO peticionDTO)
