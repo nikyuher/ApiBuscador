@@ -70,7 +70,7 @@ namespace Buscador.Api.Controllers
         //Post
         [AllowAnonymous]
         [HttpPost("login", Name = "LoginUsuario")]
-        public ActionResult<Usuario> LoginUsuario([FromQuery] LoginUsuarioDTO loginUsuario)
+        public ActionResult<Usuario> LoginUsuario([FromBody] LoginUsuarioDTO loginUsuario)
         {
 
             try
