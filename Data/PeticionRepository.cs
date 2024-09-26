@@ -53,6 +53,21 @@ namespace Buscador.Data
                 throw new Exception("Usuario no encontrado");
             }
 
+            if (_context.Empresas.Any(e => e.Nombre == peticionDTO.NombreEmpresa))
+            {
+                throw new Exception($"Ya existe una empresa con el nombre {peticionDTO.NombreEmpresa}");
+            }
+
+            if (!_context.Categorias.Any(e => e.IdCategoria == peticionDTO.IdCategoriaEmpresa))
+            {
+                throw new Exception($"No existe una categoria con el ID: {peticionDTO.IdCategoriaEmpresa}");
+            }
+
+            if (!_context.Ciudadades.Any(e => e.IdCiudad == peticionDTO.IdCiudadEmpresa))
+            {
+                throw new Exception($"No existe una ciudad con el ID: {peticionDTO.IdCiudadEmpresa}");
+            }
+
             var nuevaPeticion = new Peticion
             {
                 NombreEmpresa = peticionDTO.NombreEmpresa,
@@ -85,12 +100,12 @@ namespace Buscador.Data
                 throw new Exception($"Ya existe una empresa con el nombre {peticion.NombreEmpresa}");
             }
 
-            if (_context.EmpresaCategorias.Any(e => e.IdCategoria == peticion.IdCategoriaEmpresa))
+            if (!_context.Categorias.Any(e => e.IdCategoria == peticion.IdCategoriaEmpresa))
             {
                 throw new Exception($"No existe una categoria con el ID: {peticion.IdCategoriaEmpresa}");
             }
 
-            if (_context.EmpresasCiudades.Any(e => e.IdCiudad == peticion.IdCiudadEmpresa))
+            if (!_context.Ciudadades.Any(e => e.IdCiudad == peticion.IdCiudadEmpresa))
             {
                 throw new Exception($"No existe una ciudad con el ID: {peticion.IdCiudadEmpresa}");
             }

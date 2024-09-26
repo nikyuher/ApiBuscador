@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
 using Buscador.Data;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Buscador.Api.Controllers
 {
@@ -12,11 +13,14 @@ namespace Buscador.Api.Controllers
     public class PeticionController : ControllerBase
     {
         private readonly IPeticionService _peticionService;
+
+        private readonly IAuthService _authService;
         private readonly ILogger<PeticionController> _logger;
 
-        public PeticionController(IPeticionService peticionService, ILogger<PeticionController> logger)
+        public PeticionController(IPeticionService peticionService, IAuthService authService, ILogger<PeticionController> logger)
         {
             _peticionService = peticionService;
+            _authService = authService;
             _logger = logger;
         }
 
@@ -45,6 +49,15 @@ namespace Buscador.Api.Controllers
             try
             {
                 _logger.LogInformation("Solicitud para agregar una nueva petición.");
+
+                // Verificar si el usuario tiene acceso al recurso
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, peticionDTO.IdUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {peticionDTO.IdUsuario}.");
+                    return Forbid();
+                }
+
                 var peticion = _peticionService.AddPeticion(peticionDTO);
                 _logger.LogInformation($"Petición agregada con éxito.");
                 return Ok(peticion);
@@ -76,11 +89,19 @@ namespace Buscador.Api.Controllers
 
         // Delete
         [HttpDelete("{idPeticion}", Name = "DeletePeticion")]
-        public ActionResult DeletePeticion([FromRoute] int idPeticion)
+        public ActionResult DeletePeticion([FromRoute] int idPeticion, int idUsuario)
         {
             try
             {
                 _logger.LogInformation($"Solicitud para eliminar la petición con ID: {idPeticion}");
+                // Verificar si el usuario tiene acceso al recurso
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {idUsuario}.");
+                    return Forbid();
+                }
+
                 _peticionService.DeletePeticion(idPeticion);
                 _logger.LogInformation($"Petición con ID: {idPeticion} eliminada exitosamente.");
                 return Ok();
