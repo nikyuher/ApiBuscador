@@ -14,10 +14,13 @@ namespace Buscador.Api.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly IAuthService _authService;
 
-        public UsuarioController(IUsuarioService usuarioService, IAuthService authService)
+        private readonly ILogger<UsuarioController> _logger;
+
+        public UsuarioController(IUsuarioService usuarioService, IAuthService authService, ILogger<UsuarioController> logger)
         {
             _usuarioService = usuarioService;
             _authService = authService;
+            _logger = logger;
         }
 
         // Get
@@ -25,37 +28,54 @@ namespace Buscador.Api.Controllers
         [HttpGet]
         public ActionResult<List<UsuarioDTO>> GetAll()
         {
-            var usuarios = _usuarioService.GetAll();
-            return Ok(usuarios);
+            try
+            {
+                _logger.LogInformation("Se ha solicitado obtener todos los usuarios.");
+                var usuarios = _usuarioService.GetAll();
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al intentar obtener todos los usuarios: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{idUsuario}", Name = "GetUsuarioId")]
 
         public ActionResult<UsuarioDTO> GetUsuarioId([FromRoute] int idUsuario)
         {
             try
             {
+                // Verificar si el usuario tiene acceso al recurso
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"Acceso denegado para el usuario con ID: {idUsuario}");
+                    return Forbid();
+                }
 
                 var usuario = _usuarioService.GetUsuarioId(idUsuario);
-
+                _logger.LogInformation($"Usuario con ID {idUsuario} obtenido exitosamente.");
                 return Ok(usuario);
 
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error al intentar obtener el usuario con ID {idUsuario}: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
+        //Post
         [AllowAnonymous]
-        [HttpGet("login", Name = "LoginUsuario")]
+        [HttpPost("login", Name = "LoginUsuario")]
         public ActionResult<Usuario> LoginUsuario([FromQuery] LoginUsuarioDTO loginUsuario)
         {
 
             try
             {
-
+                _logger.LogInformation($"Se solicita iniciar sesion.");
                 var usuario = _usuarioService.LoginUsuario(loginUsuario);
                 var token = _authService.GenerateJwtToken(usuario);
 
@@ -63,27 +83,29 @@ namespace Buscador.Api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error al intentar iniciar sesion: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
-        //Post
         [AllowAnonymous]
-        [HttpPost(Name = "RegisterUsuario")]
+        [HttpPost("register",Name = "RegisterUsuario")]
 
         public ActionResult RegisterUsuario([FromBody] RegisterUsuarioDTO user)
         {
 
             try
             {
-
+                _logger.LogInformation($"Se solicita registrar un usuario.");
                 var usuario = _usuarioService.RegisterUsuario(user);
                 var token = _authService.GenerateJwtToken(usuario);
-
+                _logger.LogInformation($"Usuario registrado exitosamente: {user.Nombre}");
+                
                 return Ok(new { token });
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error al intentar registrar usuario: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
@@ -98,17 +120,29 @@ namespace Buscador.Api.Controllers
             try
             {
 
+                _logger.LogInformation($"Se solicita modificar al usuario con Id: {usuario.IdUsuario}.");
+
+                // Obtener el usuario autenticado
+                var currentUser = HttpContext.User;
+
+                // Verificar si el usuario tiene acceso al recurso
+                if (!_authService.HasAccessToResource(currentUser, usuario.IdUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {usuario.IdUsuario}.");
+                    return Forbid();
+                }
+
                 _usuarioService.UpdateUsuario(usuario);
                 return Ok(usuario);
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error al intentar modificar al usuario: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
         //Delete
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{idUsuario}", Name = "DeleteUsuario")]
 
         public ActionResult DeleteUsuario([FromRoute] int idUsuario)
@@ -116,12 +150,23 @@ namespace Buscador.Api.Controllers
 
             try
             {
+                _logger.LogInformation($"Se solicita eliminar al usuario con Id: {idUsuario}.");
+
+                // Obtener el usuario autenticado
+                var currentUser = HttpContext.User;
+
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {idUsuario}.");
+                    return Forbid();
+                }
 
                 _usuarioService.DeleteUsuario(idUsuario);
                 return Ok();
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error al intentar eliminar usuario: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
