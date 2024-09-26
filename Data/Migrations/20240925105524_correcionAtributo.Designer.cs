@@ -4,6 +4,7 @@ using Buscador.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Buscador.Data.Migrations
 {
     [DbContext(typeof(BuscadorContext))]
-    partial class BuscadorContextModelSnapshot : ModelSnapshot
+    [Migration("20240925105524_correcionAtributo")]
+    partial class correcionAtributo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,12 +320,7 @@ namespace Buscador.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PeticionIdPeticion")
-                        .HasColumnType("int");
-
                     b.HasKey("IdEmpresa");
-
-                    b.HasIndex("PeticionIdPeticion");
 
                     b.ToTable("Empresas");
 
@@ -1188,6 +1185,9 @@ namespace Buscador.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EmpresaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdCategoriaEmpresa")
                         .HasColumnType("int");
 
@@ -1205,6 +1205,10 @@ namespace Buscador.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdPeticion");
+
+                    b.HasIndex("EmpresaId")
+                        .IsUnique()
+                        .HasFilter("[EmpresaId] IS NOT NULL");
 
                     b.HasIndex("IdUsuario");
 
@@ -1237,15 +1241,6 @@ namespace Buscador.Data.Migrations
                     b.HasKey("IdUsuario");
 
                     b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("Buscador.Models.Empresa", b =>
-                {
-                    b.HasOne("Buscador.Models.Peticion", "Peticion")
-                        .WithMany()
-                        .HasForeignKey("PeticionIdPeticion");
-
-                    b.Navigation("Peticion");
                 });
 
             modelBuilder.Entity("Buscador.Models.EmpresaCategoria", b =>
@@ -1288,11 +1283,17 @@ namespace Buscador.Data.Migrations
 
             modelBuilder.Entity("Buscador.Models.Peticion", b =>
                 {
+                    b.HasOne("Buscador.Models.Empresa", "Empresa")
+                        .WithOne("Peticion")
+                        .HasForeignKey("Buscador.Models.Peticion", "EmpresaId");
+
                     b.HasOne("Buscador.Models.Usuario", "Usuario")
                         .WithMany("Peticiones")
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Empresa");
 
                     b.Navigation("Usuario");
                 });
@@ -1312,6 +1313,8 @@ namespace Buscador.Data.Migrations
                     b.Navigation("EmpresaCategorias");
 
                     b.Navigation("EmpresasCiudades");
+
+                    b.Navigation("Peticion");
                 });
 
             modelBuilder.Entity("Buscador.Models.Usuario", b =>

@@ -1,6 +1,6 @@
 namespace Buscador.Models;
 using System.ComponentModel.DataAnnotations;
-public class Usuario
+public class UsuarioDTO
 
 {
     [Key]
@@ -12,5 +12,5 @@ public class Usuario
     [Required]
     public string? Correo { get; set; }
     public bool Rol { get; set; }
-    public List<Peticion> Peticiones { get; set; } = new List<Peticion>();
+    public List<PeticionDTO> PeticionesDTO { get; set; } = new List<PeticionDTO>();
 }

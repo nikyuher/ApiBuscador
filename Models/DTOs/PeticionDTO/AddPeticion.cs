@@ -1,10 +1,10 @@
 namespace Buscador.Models;
 using System.ComponentModel.DataAnnotations;
-public class Peticion
+public class AddPeticionDTO
 
 {
-    [Key]
-    public int IdPeticion { get; set; }
+    [Required]
+    public int IdUsuario { get; set; }
     [Required]
     public string? NombreEmpresa { get; set; }
     [Required]
@@ -12,11 +12,8 @@ public class Peticion
     [Required]
     public string? DireccionEmpresa { get; set; }
     public string? ImagenEmpresaURL { get; set; }
-
+    [Required]
     public int IdCategoriaEmpresa { get; set; }
+    [Required]
     public int IdCiudadEmpresa { get; set; }
-
-    // Relación con Usuario (muchos a uno)
-    public int IdUsuario { get; set; }
-    public Usuario? Usuario { get; set; }
 }
