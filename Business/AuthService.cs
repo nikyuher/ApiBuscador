@@ -19,32 +19,37 @@ public class AuthService : IAuthService
 
 
     //Auth
-
     public string GenerateJwtToken(Usuario usuario)
     {
+        // Obtener la clave secreta, el emisor y la audiencia de la configuración
         var key = Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]);
         var issuer = _configuration["JWT:ValidIssuer"];
         var audience = _configuration["JWT:ValidAudience"];
 
-        // Crear claims para el token JWT
+        // Crear Claims de los datos que se guardaran en el token
         var claims = new[]
         {
         new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
         new Claim(ClaimTypes.Name, usuario.Nombre),
+        new Claim(ClaimTypes.Email, usuario.Correo),
         new Claim(ClaimTypes.Role, usuario.Rol ? "Admin" : "User")
     };
 
+        // Crear credenciales de firma con la clave secreta
         var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddHours(1), // Duración del token
             Issuer = issuer,
             Audience = audience,
             SigningCredentials = signingCredentials
         };
 
+
+        // Generar el token
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
@@ -59,6 +64,7 @@ public class AuthService : IAuthService
             throw new ArgumentNullException(nameof(user), "No se proporcionó un usuario autenticado.");
         }
 
+        // Obtener el ID del usuario desde el claim 'nameidentifier'
         var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null)
         {
