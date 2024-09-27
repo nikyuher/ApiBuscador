@@ -71,7 +71,7 @@ namespace Buscador.Api.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("validar", Name = "AceptarPeticion")]
-        public ActionResult AceptarPeticion([FromBody] int peticionId)
+        public ActionResult AceptarPeticion(int peticionId)
         {
             try
             {
