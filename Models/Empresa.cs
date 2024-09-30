@@ -17,7 +17,7 @@ public class Empresa
     // Relación muchos a muchos
     public List<EmpresaCategoria>? EmpresaCategorias { get; set; }
     public List<EmpresaCiudad>? EmpresasCiudades { get; set; }
-    
+    public List<UsuarioEmpresa> UsuarioEmpresas { get; set; } = new List<UsuarioEmpresa>();
     [JsonIgnore]
     public Peticion? Peticion { get; set; }
 

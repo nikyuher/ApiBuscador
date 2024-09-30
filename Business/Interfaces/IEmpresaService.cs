@@ -18,7 +18,7 @@ namespace Buscador.Business
         void Update(PutDatosEmpresaDTO empresa);
         //Delete
         void Delete(int id);
-        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
-        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad);
+        public void DeleteCategoriaEmpresa(int IdempresaCategoria);
+        public void DeleteCiudadEmpresa(int IdempresaCiudad);
     }
 }

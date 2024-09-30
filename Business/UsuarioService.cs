@@ -20,7 +20,14 @@ namespace Buscador.Business
         {
             return _usuarioRepository.GetUsuarioId(id);
         }
-
+        public PeticionesUsuarioDTO GetPeticionesUsuarioId(int id)
+        {
+            return _usuarioRepository.GetPeticionesUsuarioId(id);
+        }
+        public EmpresasUsuarioDTO GetEmpresasUsuarioId(int id)
+        {
+            return _usuarioRepository.GetEmpresasUsuarioId(id);
+        }
         public Usuario LoginUsuario(LoginUsuarioDTO loginDTO)
         {
             return _usuarioRepository.LoginUsuario(loginDTO);
@@ -43,6 +50,11 @@ namespace Buscador.Business
         public void DeleteUsuario(int idUsuario)
         {
             _usuarioRepository.DeleteUsuario(idUsuario);
+        }
+
+        public void DeleteEmpresaUsuario(int empresaUsuario){
+            _usuarioRepository.DeleteEmpresaUsuario(empresaUsuario);
+
         }
     }
 }

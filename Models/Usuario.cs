@@ -13,4 +13,5 @@ public class Usuario
     public string? Correo { get; set; }
     public bool Rol { get; set; }
     public List<Peticion> Peticiones { get; set; } = new List<Peticion>();
+    public List<UsuarioEmpresa> MisEmpresas { get; set; } = new List<UsuarioEmpresa>();
 }

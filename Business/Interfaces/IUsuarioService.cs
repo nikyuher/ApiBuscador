@@ -8,6 +8,8 @@ namespace Buscador.Business
         //Get
         public List<UsuarioDTO> GetAll();
         public UsuarioDTO GetUsuarioId(int id);
+        public PeticionesUsuarioDTO GetPeticionesUsuarioId(int id);
+        public EmpresasUsuarioDTO GetEmpresasUsuarioId(int id);
         public Usuario LoginUsuario(LoginUsuarioDTO loginDTO);
         //Register
         public Usuario RegisterUsuario(RegisterUsuarioDTO user);
@@ -15,5 +17,6 @@ namespace Buscador.Business
         void UpdateUsuario(PutUsuarioDTO usuario);
         //Delete
         void DeleteUsuario(int idUsuario);
+        void DeleteEmpresaUsuario(int empresaUsuario);
     }
 }

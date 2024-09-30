@@ -23,6 +23,8 @@ namespace Buscador.Data
             {
                 IdUsuario = usuario.IdUsuario,
                 Nombre = usuario.Nombre,
+                Correo = usuario.Correo,
+                Contrasena = usuario.Contrasena,
                 Rol = usuario.Rol
             }).ToList();
 
@@ -31,7 +33,7 @@ namespace Buscador.Data
 
         public UsuarioDTO GetUsuarioId(int id)
         {
-            var usuario = _context.Usuarios.Include(p => p.Peticiones).FirstOrDefault(u => u.IdUsuario == id);
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
 
 
             if (usuario is null)
@@ -43,7 +45,28 @@ namespace Buscador.Data
             {
                 IdUsuario = usuario.IdUsuario,
                 Nombre = usuario.Nombre,
+                Correo = usuario.Correo,
+                Contrasena = usuario.Contrasena,
                 Rol = usuario.Rol,
+            };
+
+            return usuarioDTOs;
+        }
+
+        public PeticionesUsuarioDTO GetPeticionesUsuarioId(int id)
+        {
+            var usuario = _context.Usuarios.Include(p => p.Peticiones).FirstOrDefault(u => u.IdUsuario == id);
+
+
+            if (usuario is null)
+            {
+                throw new Exception($"No hay ningun usuario con el ID: {id}");
+            }
+
+            var usuarioDTOs = new PeticionesUsuarioDTO
+            {
+                IdUsuario = usuario.IdUsuario,
+                Nombre = usuario.Nombre,
                 PeticionesDTO = usuario.Peticiones.Select(peticion => new PeticionDTO
                 {
                     IdPeticion = peticion.IdPeticion,
@@ -54,6 +77,38 @@ namespace Buscador.Data
                     ImagenEmpresaURL = peticion.ImagenEmpresaURL,
                     IdCategoriaEmpresa = peticion.IdCategoriaEmpresa,
                     IdCiudadEmpresa = peticion.IdCiudadEmpresa
+                }).ToList()
+            };
+
+            return usuarioDTOs;
+        }
+
+        public EmpresasUsuarioDTO GetEmpresasUsuarioId(int id)
+        {
+            var usuario = _context.Usuarios
+                         .Include(p => p.MisEmpresas)
+                           .ThenInclude(ue => ue.Empresa)
+                         .FirstOrDefault(u => u.IdUsuario == id);
+
+
+            if (usuario is null)
+            {
+                throw new Exception($"No hay ningun usuario con el ID: {id}");
+            }
+
+            var usuarioDTOs = new EmpresasUsuarioDTO
+            {
+                IdUsuario = usuario.IdUsuario,
+                Nombre = usuario.Nombre,
+                MisEmpresas = usuario.MisEmpresas.Select(empresa => new UsuarioEmpresaDTO
+                {
+                    IdUsuarioEmpresa = empresa.IdUsuarioEmpresa,
+                    IdEmpresa = empresa.IdEmpresa,
+                    Empresa = new NameEmpresaDTO
+                    {
+                        IdEmpresa = empresa.Empresa.IdEmpresa,
+                        Nombre = empresa.Empresa.Nombre
+                    }
                 }).ToList()
             };
 
@@ -114,18 +169,18 @@ namespace Buscador.Data
 
         public void UpdateUsuario(PutUsuarioDTO usuario)
         {
-        var existingUser = _context.Usuarios.Find(usuario.IdUsuario);
-        if (existingUser == null)
-        {
-            throw new KeyNotFoundException("No se encontró el Usuario a actualizar.");
-        }
+            var existingUser = _context.Usuarios.Find(usuario.IdUsuario);
+            if (existingUser == null)
+            {
+                throw new KeyNotFoundException("No se encontró el Usuario a actualizar.");
+            }
 
-        existingUser.Nombre = usuario.Nombre;
-        existingUser.Contrasena = usuario.Contrasena;
-        existingUser.Correo = usuario.Correo;
+            existingUser.Nombre = usuario.Nombre;
+            existingUser.Contrasena = usuario.Contrasena;
+            existingUser.Correo = usuario.Correo;
 
-        _context.Usuarios.Update(existingUser);
-        SaveChanges();
+            _context.Usuarios.Update(existingUser);
+            SaveChanges();
         }
 
         //Delete
@@ -140,6 +195,20 @@ namespace Buscador.Data
             }
 
             _context.Usuarios.Remove(usuario);
+            SaveChanges();
+        }
+
+        public void DeleteEmpresaUsuario(int idUsuarioEmpresa)
+        {
+
+            var existingEmpresa = _context.UsuarioEmpresas.FirstOrDefault(ue => ue.IdUsuarioEmpresa == idUsuarioEmpresa);
+
+            if (existingEmpresa is null)
+            {
+                throw new Exception($"La empresa ya no esta asosciada a este usuario");
+            }
+
+            _context.UsuarioEmpresas.Remove(existingEmpresa);
             SaveChanges();
         }
 

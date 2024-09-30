@@ -41,6 +41,16 @@ public class BuscadorContext : DbContext
             .WithMany(c => c.EmpresasCiudades)
             .HasForeignKey(ec => ec.IdCiudad);
 
+        modelBuilder.Entity<UsuarioEmpresa>()
+                        .HasOne(ue => ue.Usuario)
+                        .WithMany(u => u.MisEmpresas)
+                        .HasForeignKey(ue => ue.IdUsuario);
+
+        modelBuilder.Entity<UsuarioEmpresa>()
+            .HasOne(ue => ue.Empresa)
+            .WithMany(e => e.UsuarioEmpresas)
+            .HasForeignKey(ue => ue.IdEmpresa);
+
         modelBuilder.Entity<Ciudad>().HasData(
         new Ciudad { IdCiudad = 1, Nombre = "Madrid" },
         new Ciudad { IdCiudad = 2, Nombre = "Barcelona" },
@@ -240,5 +250,5 @@ public class BuscadorContext : DbContext
 
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Peticion> Peticiones { get; set; }
-
+    public DbSet<UsuarioEmpresa> UsuarioEmpresas { get; set; }
 }

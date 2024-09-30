@@ -202,36 +202,36 @@ namespace Buscador.Api.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("categoria", Name = "DeleteCategoriaEmpresa")]
-        public IActionResult DeleteCategoriaEmpresa([FromBody] AddEmpresaCategoriaDTO empresaCategoria)
+        public IActionResult DeleteCategoriaEmpresa(int IdEmpresaCategoria)
         {
             try
             {
-                _logger.LogInformation($"Solicitud para eliminar la categoría de la empresa con ID: {empresaCategoria.IdEmpresa}");
-                _empresaService.DeleteCategoriaEmpresa(empresaCategoria);
-                _logger.LogInformation($"Categoría eliminada exitosamente de la empresa con ID: {empresaCategoria.IdEmpresa}");
+                _logger.LogInformation($"Solicitud para eliminar la categoría de la empresa con ID: {IdEmpresaCategoria}");
+                _empresaService.DeleteCategoriaEmpresa(IdEmpresaCategoria);
+                _logger.LogInformation($"Categoría eliminada exitosamente de la empresa con ID: {IdEmpresaCategoria}");
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al eliminar la categoría de la empresa con ID {empresaCategoria.IdEmpresa}: {ex.Message}");
+                _logger.LogError($"Error al eliminar la categoría de la empresa con ID {IdEmpresaCategoria}: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("ciudad", Name = "DeleteCiudadEmpresa")]
-        public IActionResult DeleteCiudadEmpresa([FromBody] EmpresaCiudadDTO empresaCiudad)
+        public IActionResult DeleteCiudadEmpresa(int IdEmpresaCiudad)
         {
             try
             {
-                _logger.LogInformation($"Solicitud para eliminar la ciudad de la empresa con ID: {empresaCiudad.IdEmpresa}");
-                _empresaService.DeleteCiudadEmpresa(empresaCiudad);
-                _logger.LogInformation($"Ciudad eliminada exitosamente de la empresa con ID: {empresaCiudad.IdEmpresa}");
+                _logger.LogInformation($"Solicitud para eliminar la ciudad de la empresa con ID: {IdEmpresaCiudad}");
+                _empresaService.DeleteCiudadEmpresa(IdEmpresaCiudad);
+                _logger.LogInformation($"Ciudad eliminada exitosamente de la empresa con ID: {IdEmpresaCiudad}");
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al eliminar la ciudad de la empresa con ID {empresaCiudad.IdEmpresa}: {ex.Message}");
+                _logger.LogError($"Error al eliminar la ciudad de la empresa con ID {IdEmpresaCiudad}: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }

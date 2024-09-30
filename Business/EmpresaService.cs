@@ -42,13 +42,13 @@ namespace Buscador.Business
 
         //Delete
         public void Delete(int id) => _empresaRepository.Delete(id);
-        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        public void DeleteCategoriaEmpresa(int IdempresaCategoria)
         {
-            _empresaRepository.DeleteCategoriaEmpresa(empresaCategoria);
+            _empresaRepository.DeleteCategoriaEmpresa(IdempresaCategoria);
         }
-        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad)
+        public void DeleteCiudadEmpresa(int IdempresaCiudad)
         {
-            _empresaRepository.DeleteCiudadEmpresa(empresaCiudad);
+            _empresaRepository.DeleteCiudadEmpresa(IdempresaCiudad);
         }
     }
 }
