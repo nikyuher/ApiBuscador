@@ -1,16 +1,10 @@
 using Buscador.Business;
 using Buscador.Data;
 using Serilog;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Gemu.Business;
 
 
 var builder = WebApplication.CreateBuilder(args);

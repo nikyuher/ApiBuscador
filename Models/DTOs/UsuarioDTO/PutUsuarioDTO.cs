@@ -1,6 +1,6 @@
 namespace Buscador.Models;
 using System.ComponentModel.DataAnnotations;
-public class UsuarioDTO
+public class PutUsuarioDTO
 
 {
     [Key]
@@ -8,8 +8,7 @@ public class UsuarioDTO
     [Required]
     public string? Nombre { get; set; }
     [Required]
-    public string? Correo { get; set; }
-    [Required]
     public string? Contrasena { get; set; }
-    public bool Rol { get; set; }
+    [Required]
+    public string? Correo { get; set; }
 }

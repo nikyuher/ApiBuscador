@@ -1,7 +1,7 @@
 using Buscador.Models;
 using System.Collections.Generic;
 
-namespace Buscador.Data
+namespace Buscador.Business
 {
     public interface IPeticionService
     {

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Buscador.Models;
 
 
-namespace Buscador.Data
+namespace Buscador.Business
 {
     public interface ICiudadService
     {

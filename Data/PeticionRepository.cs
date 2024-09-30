@@ -134,10 +134,18 @@ namespace Buscador.Data
                 IdEmpresa = nuevaEmpresa.IdEmpresa
             };
 
+            var newUsuarioEmpresa = new UsuarioEmpresa
+            {
+                IdUsuario = peticion.IdUsuario,
+                IdEmpresa = nuevaEmpresa.IdEmpresa
+            };
+
             DeletePeticion(idPeticion);
 
             _context.EmpresaCategorias.Add(newCategoriaEmpresa);
             _context.EmpresasCiudades.Add(newCiudadEmpresa);
+            _context.UsuarioEmpresas.Add(newUsuarioEmpresa);
+            
             _context.SaveChanges();
         }
 

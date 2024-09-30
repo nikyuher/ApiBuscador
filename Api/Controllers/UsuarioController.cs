@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Buscador.Models;
-using Buscador.Data;
+using Buscador.Business;
 
 namespace Buscador.Api.Controllers
 {
@@ -67,6 +67,58 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [HttpGet("{idUsuario}/peticiones", Name = "GetPeticionesUsuarioId")]
+
+        public ActionResult<PeticionesUsuarioDTO> GetPeticionesUsuarioId([FromRoute] int idUsuario)
+        {
+            try
+            {
+                // Verificar si el usuario tiene acceso al recurso
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"Acceso denegado para el usuario con ID: {idUsuario}");
+                    return Forbid();
+                }
+
+                var usuario = _usuarioService.GetPeticionesUsuarioId(idUsuario);
+                _logger.LogInformation($"Peticiones del usuario con ID {idUsuario} obtenido exitosamente.");
+                return Ok(usuario);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al intentar obtener el las peticiones del usuario con ID {idUsuario}: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("{idUsuario}/empresas", Name = "GetEmpresasUsuarioId")]
+
+        public ActionResult<EmpresasUsuarioDTO> GetEmpresasUsuarioId([FromRoute] int idUsuario)
+        {
+            try
+            {
+                // Verificar si el usuario tiene acceso al recurso
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"Acceso denegado para el usuario con ID: {idUsuario}");
+                    return Forbid();
+                }
+
+                var usuario = _usuarioService.GetEmpresasUsuarioId(idUsuario);
+                _logger.LogInformation($"Empresas del usuario con ID {idUsuario} obtenido exitosamente.");
+                return Ok(usuario);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al intentar obtener el las empresas del usuario con ID {idUsuario}: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         //Post
         [AllowAnonymous]
         [HttpPost("login", Name = "LoginUsuario")]
@@ -89,7 +141,7 @@ namespace Buscador.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register",Name = "RegisterUsuario")]
+        [HttpPost("register", Name = "RegisterUsuario")]
 
         public ActionResult RegisterUsuario([FromBody] RegisterUsuarioDTO user)
         {
@@ -100,7 +152,7 @@ namespace Buscador.Api.Controllers
                 var usuario = _usuarioService.RegisterUsuario(user);
                 var token = _authService.GenerateJwtToken(usuario);
                 _logger.LogInformation($"Usuario registrado exitosamente: {user.Nombre}");
-                
+
                 return Ok(new { token });
             }
             catch (Exception ex)
@@ -114,7 +166,7 @@ namespace Buscador.Api.Controllers
 
         [HttpPut(Name = "UpdateUsuario")]
 
-        public ActionResult UpdateUsuario([FromBody] UsuarioDTO usuario)
+        public ActionResult UpdateUsuario([FromBody] PutUsuarioDTO usuario)
         {
 
             try
@@ -167,6 +219,34 @@ namespace Buscador.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Error al intentar eliminar usuario: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{idUsuario}/empresa", Name = "DeleteEmpresaUsuario")]
+
+        public ActionResult DeleteEmpresaUsuario( [FromRoute] int idUsuario, int idEmpresaUsuario)
+        {
+
+            try
+            {
+                _logger.LogInformation($"Se solicita eliminar la empresa del usuario con Id: {idUsuario}.");
+
+                // Obtener el usuario autenticado
+                var currentUser = HttpContext.User;
+
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {idUsuario}.");
+                    return Forbid();
+                }
+
+                _usuarioService.DeleteEmpresaUsuario(idEmpresaUsuario);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al intentar eliminar la empresa del usuario {idUsuario}: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }

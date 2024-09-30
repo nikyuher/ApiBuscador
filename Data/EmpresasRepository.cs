@@ -149,18 +149,11 @@ namespace Buscador.Data
             }
         }
 
-        public void DeleteCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria)
+        public void DeleteCategoriaEmpresa(int IdEmpresaCategoria)
         {
 
-            var empresa = _context.Empresas.Find(empresaCategoria.IdEmpresa);
-
-            if (empresa is null)
-            {
-                throw new Exception("La empresa puesta ya no existe.");
-            }
-
             var existingCategoriaEmpresa = _context.EmpresaCategorias
-                .FirstOrDefault(ec => ec.IdCategoria == empresaCategoria.IdCategoria && ec.IdEmpresa == empresaCategoria.IdEmpresa);
+                .FirstOrDefault(ec => ec.IdEmpresaCategoria == IdEmpresaCategoria);
 
             if (existingCategoriaEmpresa is null)
             {
@@ -171,18 +164,10 @@ namespace Buscador.Data
             _context.SaveChanges();
         }
 
-        public void DeleteCiudadEmpresa(EmpresaCiudadDTO empresaCiudad)
+        public void DeleteCiudadEmpresa(int idCiudadEmpresa)
         {
-
-            var empresa = _context.Empresas.Find(empresaCiudad.IdEmpresa);
-
-            if (empresa is null)
-            {
-                throw new Exception("La empresa puesta no existe.");
-            }
-
             var existingCiudadEmpresa = _context.EmpresasCiudades
-                .FirstOrDefault(ec => ec.IdCiudad == empresaCiudad.IdCiudad && ec.IdEmpresa == empresaCiudad.IdEmpresa);
+                .FirstOrDefault(ec => ec.IdEmpresaCiudad == idCiudadEmpresa);
 
             if (existingCiudadEmpresa is null)
             {
