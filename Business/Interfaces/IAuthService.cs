@@ -1,6 +1,6 @@
 using Buscador.Models;
 using System.Security.Claims;
-namespace Buscador.Data;
+namespace Buscador.Business;
 public interface IAuthService
 {
     //Auth

@@ -9,7 +9,7 @@ namespace Buscador.Data
         public UsuarioDTO GetUsuarioId(int id);
         public Usuario LoginUsuario(LoginUsuarioDTO loginDTO);
         public Usuario RegisterUsuario(RegisterUsuarioDTO user);
-        void UpdateUsuario(UsuarioDTO usuario);
+        void UpdateUsuario(PutUsuarioDTO usuario);
         void DeleteUsuario(int idUsuario);
     }
 }

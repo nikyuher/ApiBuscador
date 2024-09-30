@@ -33,7 +33,7 @@ namespace Buscador.Business
         }
 
         //Update
-        public void UpdateUsuario(UsuarioDTO usuario)
+        public void UpdateUsuario(PutUsuarioDTO usuario)
         {
             _usuarioRepository.UpdateUsuario(usuario);
         }

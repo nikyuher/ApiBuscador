@@ -2,7 +2,7 @@ using Buscador.Models;
 using Buscador.Data;
 using System.Collections.Generic;
 
-namespace Buscador.Data
+namespace Buscador.Business
 {
     public interface IEmpresaService
     {

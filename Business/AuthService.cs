@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Buscador.Data;
 using Buscador.Models;
 
-namespace Gemu.Business;
+namespace Buscador.Business;
 public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;

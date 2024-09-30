@@ -112,7 +112,7 @@ namespace Buscador.Data
 
         //Update
 
-        public void UpdateUsuario(UsuarioDTO usuario)
+        public void UpdateUsuario(PutUsuarioDTO usuario)
         {
         var existingUser = _context.Usuarios.Find(usuario.IdUsuario);
         if (existingUser == null)

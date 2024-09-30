@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
-using Buscador.Data;
+using Buscador.Business;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 

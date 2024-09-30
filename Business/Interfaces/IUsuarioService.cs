@@ -1,7 +1,7 @@
 using Buscador.Models;
 using System.Collections.Generic;
 
-namespace Buscador.Data
+namespace Buscador.Business
 {
     public interface IUsuarioService
     {
@@ -12,7 +12,7 @@ namespace Buscador.Data
         //Register
         public Usuario RegisterUsuario(RegisterUsuarioDTO user);
         //Update
-        void UpdateUsuario(UsuarioDTO usuario);
+        void UpdateUsuario(PutUsuarioDTO usuario);
         //Delete
         void DeleteUsuario(int idUsuario);
     }

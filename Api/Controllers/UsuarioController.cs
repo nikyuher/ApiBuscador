@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Buscador.Models;
-using Buscador.Data;
+using Buscador.Business;
 
 namespace Buscador.Api.Controllers
 {
@@ -114,7 +114,7 @@ namespace Buscador.Api.Controllers
 
         [HttpPut(Name = "UpdateUsuario")]
 
-        public ActionResult UpdateUsuario([FromBody] UsuarioDTO usuario)
+        public ActionResult UpdateUsuario([FromBody] PutUsuarioDTO usuario)
         {
 
             try
