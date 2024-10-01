@@ -208,6 +208,15 @@ namespace Buscador.Data
                 throw new Exception($"La empresa ya no esta asosciada a este usuario");
             }
 
+
+            var empresaExisting = _context.Empresas.FirstOrDefault(e => e.IdEmpresa == existingEmpresa.IdEmpresa);
+
+            if (empresaExisting is null)
+            {
+                throw new Exception($"La empresa fue eliminada antes de estar en el usuario");
+            }
+
+            _context.Empresas.Remove(empresaExisting);
             _context.UsuarioEmpresas.Remove(existingEmpresa);
             SaveChanges();
         }

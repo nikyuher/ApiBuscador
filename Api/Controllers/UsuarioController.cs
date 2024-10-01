@@ -209,7 +209,7 @@ namespace Buscador.Api.Controllers
 
                 if (!_authService.HasAccessToResource(currentUser, idUsuario))
                 {
-                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {idUsuario}.");
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar la peticion del usuario con ID: {idUsuario}.");
                     return Forbid();
                 }
 
@@ -237,7 +237,7 @@ namespace Buscador.Api.Controllers
 
                 if (!_authService.HasAccessToResource(currentUser, idUsuario))
                 {
-                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {idUsuario}.");
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar la empresa del usuario con ID: {idUsuario}.");
                     return Forbid();
                 }
 
