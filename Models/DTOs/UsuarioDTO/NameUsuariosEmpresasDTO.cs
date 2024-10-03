@@ -8,6 +8,6 @@ public class UsuarioEmpresaDTO
     public int IdUsuarioEmpresa { get; set; }
     
     public int IdEmpresa { get; set; }
-    public NameEmpresaDTO? Empresa { get; set; }
+    public DatosEmpresaDTO? Empresa { get; set; }
 
 }

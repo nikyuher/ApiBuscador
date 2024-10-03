@@ -104,10 +104,12 @@ namespace Buscador.Data
                 {
                     IdUsuarioEmpresa = empresa.IdUsuarioEmpresa,
                     IdEmpresa = empresa.IdEmpresa,
-                    Empresa = new NameEmpresaDTO
+                    Empresa = new DatosEmpresaDTO
                     {
                         IdEmpresa = empresa.Empresa.IdEmpresa,
-                        Nombre = empresa.Empresa.Nombre
+                        Nombre = empresa.Empresa.Nombre,
+                        Direccion = empresa.Empresa.Direccion,
+                        Imagen = empresa.Empresa.Imagen
                     }
                 }).ToList()
             };
@@ -169,19 +171,44 @@ namespace Buscador.Data
 
         public void UpdateUsuario(PutUsuarioDTO usuario)
         {
+            // Busca al usuario existente en la base de datos
             var existingUser = _context.Usuarios.Find(usuario.IdUsuario);
             if (existingUser == null)
             {
                 throw new KeyNotFoundException("No se encontró el Usuario a actualizar.");
             }
 
+            // Verifica si el correo está en uso por otro usuario
+            if (usuario.Correo != existingUser.Correo &&
+                _context.Usuarios.Any(u => u.Correo == usuario.Correo))
+            {
+                throw new ArgumentException("El correo electrónico ya está en uso por otro usuario.");
+            }
+
+            // Verifica si la contraseña está en uso por otro usuario
+            if (usuario.Contrasena != existingUser.Contrasena &&
+                _context.Usuarios.Any(u => u.Contrasena == usuario.Contrasena))
+            {
+                throw new ArgumentException("La contraseña ya está en uso por otro usuario.");
+            }
+
+            // Actualiza los datos del usuario existente
             existingUser.Nombre = usuario.Nombre;
-            existingUser.Contrasena = usuario.Contrasena;
+
+            // Solo actualiza la contraseña si se ha cambiado
+            if (usuario.Contrasena != existingUser.Contrasena)
+            {
+                existingUser.Contrasena = usuario.Contrasena;
+            }
+
+            // Actualiza el correo si se ha cambiado
             existingUser.Correo = usuario.Correo;
 
+            // Actualiza el usuario en el contexto
             _context.Usuarios.Update(existingUser);
             SaveChanges();
         }
+
 
         //Delete
 
