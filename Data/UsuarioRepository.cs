@@ -24,7 +24,6 @@ namespace Buscador.Data
                 IdUsuario = usuario.IdUsuario,
                 Nombre = usuario.Nombre,
                 Correo = usuario.Correo,
-                Contrasena = usuario.Contrasena,
                 Rol = usuario.Rol
             }).ToList();
 
@@ -46,7 +45,6 @@ namespace Buscador.Data
                 IdUsuario = usuario.IdUsuario,
                 Nombre = usuario.Nombre,
                 Correo = usuario.Correo,
-                Contrasena = usuario.Contrasena,
                 Rol = usuario.Rol,
             };
 
