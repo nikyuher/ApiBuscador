@@ -8,7 +8,5 @@ public class PutUsuarioDTO
     [Required]
     public string? Nombre { get; set; }
     [Required]
-    public string? Contrasena { get; set; }
-    [Required]
     public string? Correo { get; set; }
 }

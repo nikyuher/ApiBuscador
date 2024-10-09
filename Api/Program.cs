@@ -1,5 +1,6 @@
 using Buscador.Business;
 using Buscador.Data;
+using Buscador.Api.Middleware;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -65,6 +66,7 @@ builder.Services.AddScoped<IPeticionRepository, PeticionRepository>();
 builder.Services.AddScoped<IPeticionService, PeticionService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Agregar controladores y Swagger
 builder.Services.AddControllers();
@@ -111,7 +113,10 @@ app.UseCors(policyBuilder => policyBuilder
     .AllowAnyHeader());
 
 app.UseAuthentication();
+// **Registrar el TokenValidationMiddleware aquí**
+app.UseTokenValidationMiddleware();
 app.UseAuthorization();
+
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())

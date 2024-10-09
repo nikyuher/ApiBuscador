@@ -32,7 +32,8 @@ public class AuthService : IAuthService
         new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
         new Claim(ClaimTypes.Name, usuario.Nombre),
         new Claim(ClaimTypes.Email, usuario.Correo),
-        new Claim(ClaimTypes.Role, usuario.Rol ? "Admin" : "User")
+        new Claim(ClaimTypes.Role, usuario.Rol ? "Admin" : "User"),
+        new Claim("PasswordChangedAt", usuario.PasswordChangedAt.ToUniversalTime().ToString("o"))
     };
 
         // Crear credenciales de firma con la clave secreta

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Buscador.Models;
 using Buscador.Business;
+using System.Security.Claims;
 
 namespace Buscador.Api.Controllers
 {
@@ -194,6 +195,35 @@ namespace Buscador.Api.Controllers
             }
         }
 
+        [HttpPost("cambiar-contrasena", Name = "CambiarContrasena")]
+        public ActionResult CambiarContrasena([FromBody] CambiarContrasenaDTO request)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+                int userId = ObtenerUsuarioDelToken();
+
+                _usuarioService.CambiarContrasena(userId, request);
+
+                return Ok(new { message = "Contraseña cambiada correctamente. Por favor, inicie sesión nuevamente." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al intentar cambiar la contraseña: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        private int ObtenerUsuarioDelToken()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                throw new InvalidOperationException("No se pudo determinar el ID del usuario a partir del token.");
+            }
+            return userId;
+        }
+
         //Delete
         [HttpDelete("{idUsuario}", Name = "DeleteUsuario")]
 
@@ -225,7 +255,7 @@ namespace Buscador.Api.Controllers
 
         [HttpDelete("{idUsuario}/empresa", Name = "DeleteEmpresaUsuario")]
 
-        public ActionResult DeleteEmpresaUsuario( [FromRoute] int idUsuario, int idEmpresaUsuario)
+        public ActionResult DeleteEmpresaUsuario([FromRoute] int idUsuario, int idEmpresaUsuario)
         {
 
             try
@@ -248,6 +278,59 @@ namespace Buscador.Api.Controllers
             {
                 _logger.LogError($"Error al intentar eliminar la empresa del usuario {idUsuario}: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        //Email
+
+        [AllowAnonymous]
+        [HttpPost("solicitar-recuperacion", Name = "SolicitarRecuperacion")]
+        public async Task<IActionResult> SolicitarRecuperacion([FromBody] SolicitarRecuperacionDTO request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.Correo))
+            {
+                return BadRequest("El correo es obligatorio.");
+            }
+
+            try
+            {
+                await _usuarioService.SolicitarRecuperacionAsync(request);
+                _logger.LogInformation($"Solicitud de recuperación enviada para el correo: {request.Correo}");
+                return Ok(new { message = "Código de recuperación enviado a tu correo electrónico." });
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning($"Error en solicitud de recuperación: {ex.Message}");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error inesperado en solicitud de recuperación: {ex.Message}");
+                return StatusCode(500, new { message = "Ocurrió un error al procesar tu solicitud." });
+            }
+        }
+
+        // Endpoint para restablecer la contraseña con el código
+        [AllowAnonymous]
+        [HttpPost("restablecer-contrasena", Name = "RestablecerContrasena")]
+        public async Task<IActionResult> RestablecerContrasena([FromBody] RestablecerContrasenaDTO request)
+        {
+
+            try
+            {
+                await _usuarioService.CambiarContrasenaConCodigoAsync(request);
+                _logger.LogInformation($"Contraseña restablecida para el correo: {request.Correo}");
+                return Ok(new { message = "Contraseña restablecida exitosamente. Puedes iniciar sesión con tu nueva contraseña." });
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning($"Error en restablecimiento de contraseña: {ex.Message}");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error inesperado en restablecimiento de contraseña: {ex.Message}");
+                return StatusCode(500, new { message = "Ocurrió un error al procesar tu solicitud." });
             }
         }
     }

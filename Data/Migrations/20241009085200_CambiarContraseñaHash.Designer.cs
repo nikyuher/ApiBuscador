@@ -4,6 +4,7 @@ using Buscador.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Buscador.Data.Migrations
 {
     [DbContext(typeof(BuscadorContext))]
-    partial class BuscadorContextModelSnapshot : ModelSnapshot
+    [Migration("20241009085200_CambiarContraseñaHash")]
+    partial class CambiarContraseñaHash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1232,12 +1234,6 @@ namespace Buscador.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PasswordChangedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PasswordResetCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("PasswordResetCodeExpiry")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Rol")
