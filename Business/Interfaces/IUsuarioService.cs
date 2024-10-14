@@ -23,6 +23,7 @@ namespace Buscador.Business
 
         //Email
         Task SolicitarRecuperacionAsync(SolicitarRecuperacionDTO request);
+        Task VerificarCodigoAsync(VerificarCodigoDTO codigoDTO);
         Task CambiarContrasenaConCodigoAsync(RestablecerContrasenaDTO request);
     }
 }

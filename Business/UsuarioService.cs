@@ -99,24 +99,37 @@ namespace Buscador.Business
             }
         }
 
+        public async Task VerificarCodigoAsync(VerificarCodigoDTO codigoDTO)
+        {
+            var usuario = await _usuarioRepository.ObtenerUsuarioPorCorreoAsync(codigoDTO.Correo);
+            if (usuario == null)
+            {
+                throw new ArgumentException("Usuario no encontrado.");
+            }
+
+            if (usuario.PasswordResetCode != codigoDTO.Codigo || usuario.PasswordResetCodeExpiry < DateTime.UtcNow)
+            {
+                throw new ArgumentException("Código de recuperación inválido o expirado.");
+            }
+        }
 
         public async Task CambiarContrasenaConCodigoAsync(RestablecerContrasenaDTO request)
         {
             var usuario = await _usuarioRepository.ObtenerUsuarioPorCorreoAsync(request.Correo);
             if (usuario == null)
             {
-                throw new ArgumentException("Usuario no encontrado.");
+                throw new Exception("Usuario no encontrado.");
             }
 
             if (usuario.PasswordResetCode != request.Codigo || usuario.PasswordResetCodeExpiry < DateTime.UtcNow)
             {
-                throw new ArgumentException("Código de recuperación inválido o expirado.");
+                throw new Exception("Código de recuperación inválido o expirado.");
             }
 
             // Verificar que la nueva contraseña y su confirmación coincidan
             if (request.NuevaContrasena != request.ConfirmarContrasena)
             {
-                throw new ArgumentException("Las contraseñas no coinciden.");
+                throw new Exception("Las contraseñas no coinciden.");
             }
 
             // Restablecer la contraseña

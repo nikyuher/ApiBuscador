@@ -298,15 +298,28 @@ namespace Buscador.Api.Controllers
                 _logger.LogInformation($"Solicitud de recuperación enviada para el correo: {request.Correo}");
                 return Ok(new { message = "Código de recuperación enviado a tu correo electrónico." });
             }
-            catch (ArgumentException ex)
-            {
-                _logger.LogWarning($"Error en solicitud de recuperación: {ex.Message}");
-                return BadRequest(new { message = ex.Message });
-            }
             catch (Exception ex)
             {
                 _logger.LogError($"Error inesperado en solicitud de recuperación: {ex.Message}");
-                return StatusCode(500, new { message = "Ocurrió un error al procesar tu solicitud." });
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("verficar-codigo", Name = "VerificarCodigo")]
+        public async Task<IActionResult> VerificarCodigo([FromBody] VerificarCodigoDTO request)
+        {
+
+            try
+            {
+                await _usuarioService.VerificarCodigoAsync(request);
+                _logger.LogInformation($"Verificacion de codigo por el correo: {request.Correo}");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error inesperado en la verificaicion del codigo: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -322,15 +335,10 @@ namespace Buscador.Api.Controllers
                 _logger.LogInformation($"Contraseña restablecida para el correo: {request.Correo}");
                 return Ok(new { message = "Contraseña restablecida exitosamente. Puedes iniciar sesión con tu nueva contraseña." });
             }
-            catch (ArgumentException ex)
-            {
-                _logger.LogWarning($"Error en restablecimiento de contraseña: {ex.Message}");
-                return BadRequest(new { message = ex.Message });
-            }
             catch (Exception ex)
             {
                 _logger.LogError($"Error inesperado en restablecimiento de contraseña: {ex.Message}");
-                return StatusCode(500, new { message = "Ocurrió un error al procesar tu solicitud." });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
     }
