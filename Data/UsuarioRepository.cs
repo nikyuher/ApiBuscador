@@ -186,7 +186,7 @@ namespace Buscador.Data
             {
                 throw new ArgumentException("El correo electrónico ya está en uso por otro usuario.");
             }
-
+            existingUser.Nombre=usuario.Nombre;
             existingUser.Correo = usuario.Correo;
 
             _context.Usuarios.Update(existingUser);
