@@ -9,7 +9,5 @@ public class UsuarioDTO
     public string? Nombre { get; set; }
     [Required]
     public string? Correo { get; set; }
-    [Required]
-    public string? Contrasena { get; set; }
     public bool Rol { get; set; }
 }

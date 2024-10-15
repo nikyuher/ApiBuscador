@@ -1,4 +1,5 @@
 using Buscador.Models;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace Buscador.Business
@@ -15,8 +16,14 @@ namespace Buscador.Business
         public Usuario RegisterUsuario(RegisterUsuarioDTO user);
         //Update
         void UpdateUsuario(PutUsuarioDTO usuario);
+        void CambiarContrasena(int idUsuario, CambiarContrasenaDTO request);
         //Delete
         void DeleteUsuario(int idUsuario);
         void DeleteEmpresaUsuario(int empresaUsuario);
+
+        //Email
+        Task SolicitarRecuperacionAsync(SolicitarRecuperacionDTO request);
+        Task VerificarCodigoAsync(VerificarCodigoDTO codigoDTO);
+        Task CambiarContrasenaConCodigoAsync(RestablecerContrasenaDTO request);
     }
 }

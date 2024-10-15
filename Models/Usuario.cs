@@ -10,8 +10,12 @@ public class Usuario
     [Required]
     public string? Contrasena { get; set; }
     [Required]
-    public string? Correo { get; set; }
+    [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
+    public string Correo { get; set; }
     public bool Rol { get; set; }
+    public string? PasswordResetCode { get; set; } 
+    public DateTime? PasswordResetCodeExpiry { get; set; }
+    public DateTime PasswordChangedAt { get; set; }
     public List<Peticion> Peticiones { get; set; } = new List<Peticion>();
     public List<UsuarioEmpresa> MisEmpresas { get; set; } = new List<UsuarioEmpresa>();
 }
