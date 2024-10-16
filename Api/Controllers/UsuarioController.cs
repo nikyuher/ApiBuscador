@@ -196,14 +196,19 @@ namespace Buscador.Api.Controllers
         }
 
         [HttpPost("cambiar-contrasena", Name = "CambiarContrasena")]
-        public ActionResult CambiarContrasena([FromBody] CambiarContrasenaDTO request)
+        public ActionResult CambiarContrasena(int idUsuario, [FromBody] CambiarContrasenaDTO request)
         {
             try
             {
                 var currentUser = HttpContext.User;
-                int userId = ObtenerUsuarioDelToken();
 
-                _usuarioService.CambiarContrasena(userId, request);
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar al usuario con ID: {idUsuario}.");
+                    return Forbid();
+                }
+
+                _usuarioService.CambiarContrasena(idUsuario, request);
 
                 return Ok(new { message = "Contraseña cambiada correctamente. Por favor, inicie sesión nuevamente." });
             }
@@ -212,16 +217,6 @@ namespace Buscador.Api.Controllers
                 _logger.LogError($"Error al intentar cambiar la contraseña: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
-        }
-
-        private int ObtenerUsuarioDelToken()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
-            {
-                throw new InvalidOperationException("No se pudo determinar el ID del usuario a partir del token.");
-            }
-            return userId;
         }
 
         //Delete

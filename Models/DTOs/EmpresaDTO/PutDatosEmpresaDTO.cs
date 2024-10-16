@@ -5,6 +5,7 @@ public class PutDatosEmpresaDTO
 {
     [Key]
     public int IdEmpresa { get; set; }
+    public int IdUsuario { get; set; }
     [Required]
     public string? Nombre { get; set; }
     [Required]

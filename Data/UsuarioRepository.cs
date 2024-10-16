@@ -106,6 +106,7 @@ namespace Buscador.Data
                     {
                         IdEmpresa = empresa.Empresa.IdEmpresa,
                         Nombre = empresa.Empresa.Nombre,
+                        Descripcion = empresa.Empresa.Descripcion,
                         Direccion = empresa.Empresa.Direccion,
                         Imagen = empresa.Empresa.Imagen
                     }
@@ -199,13 +200,6 @@ namespace Buscador.Data
             if (usuario == null)
             {
                 throw new KeyNotFoundException("Usuario no encontrado.");
-            }
-
-            // Verificar la contraseña actual
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.ContrasenaActual, usuario.Contrasena);
-            if (!isPasswordValid)
-            {
-                throw new ArgumentException("La contraseña actual es incorrecta.");
             }
 
             // Verificar que la nueva contraseña y la confirmación coincidan

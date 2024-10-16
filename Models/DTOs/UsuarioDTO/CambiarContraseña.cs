@@ -3,8 +3,6 @@ namespace Buscador.Models
 {
     public class CambiarContrasenaDTO
     {
-        [Required]
-        public string? ContrasenaActual { get; set; }
 
         [Required]
         public string? NuevaContrasena { get; set; }
