@@ -12,6 +12,13 @@ public class Empresa
     public string? Descripcion { get; set; }
     [Required]
     public string? Direccion { get; set; }
+    [Required]
+    public int Telefono { get; set; }
+
+    [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
+    public string? CorreoEmpresa { get; set; }
+    [Required]
+    public string? SitioWeb { get; set; }
     public string? Imagen { get; set; }
 
     // Relación muchos a muchos
