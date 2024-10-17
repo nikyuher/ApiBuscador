@@ -7,7 +7,7 @@ namespace Buscador.Business
     public interface IEmpresaService
     {
         //Get
-        List<Empresa> GetAll();
+        List<GetAllEmpresaDTO> GetAll();
         public List<Empresa> BuscadorEmpresaNombre(string nombre);
         //Post
         Empresa GetById(int id);

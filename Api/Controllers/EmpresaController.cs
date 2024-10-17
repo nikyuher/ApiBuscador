@@ -26,7 +26,7 @@ namespace Buscador.Api.Controllers
         //Get
         [AllowAnonymous]
         [HttpGet(Name = "GetAllEmpresas")]
-        public ActionResult<List<Empresa>> GetAll()
+        public ActionResult<List<GetAllEmpresaDTO>> GetAll()
         {
             try
             {
