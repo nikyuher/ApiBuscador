@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Buscador.Models;
 using Buscador.Business;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Buscador.Api.Controllers
 {
@@ -12,18 +13,20 @@ namespace Buscador.Api.Controllers
     public class EmpresaController : ControllerBase
     {
         private readonly IEmpresaService _empresaService;
+        private readonly IAuthService _authService;
         private readonly ILogger<EmpresaController> _logger;
 
-        public EmpresaController(IEmpresaService empresaService, ILogger<EmpresaController> logger)
+        public EmpresaController(IEmpresaService empresaService, IAuthService authService, ILogger<EmpresaController> logger)
         {
             _empresaService = empresaService;
             _logger = logger;
+            _authService = authService;
         }
 
         //Get
         [AllowAnonymous]
         [HttpGet(Name = "GetAllEmpresas")]
-        public ActionResult<List<Empresa>> GetAll()
+        public ActionResult<List<GetAllEmpresaDTO>> GetAll()
         {
             try
             {
@@ -145,7 +148,6 @@ namespace Buscador.Api.Controllers
         }
 
         //Put
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}", Name = "UpdateEmpresa")]
         public IActionResult Update([FromRoute] int id, [FromBody] PutDatosEmpresaDTO empresa)
         {
@@ -164,6 +166,13 @@ namespace Buscador.Api.Controllers
                     return BadRequest();
                 }
 
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, empresa.IdUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar la empresa del usuario con ID: {empresa.IdUsuario}.");
+                    return Forbid();
+                }
+
                 _empresaService.Update(empresa);
                 _logger.LogInformation($"Empresa con ID: {id} actualizada exitosamente.");
                 return Ok();
@@ -176,9 +185,8 @@ namespace Buscador.Api.Controllers
         }
 
         //Delete
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}", Name = "DeleteEmpresa")]
-        public IActionResult Delete([FromRoute] int id)
+        [HttpDelete("{id}/user", Name = "DeleteEmpresa")]
+        public IActionResult Delete([FromRoute] int id, int idUsuario)
         {
             try
             {
@@ -187,6 +195,13 @@ namespace Buscador.Api.Controllers
                 {
                     _logger.LogWarning($"No se encontró la empresa con ID: {id} para eliminar.");
                     return BadRequest();
+                }
+
+                var currentUser = HttpContext.User;
+                if (!_authService.HasAccessToResource(currentUser, idUsuario))
+                {
+                    _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar la empresa del usuario con ID: {idUsuario}.");
+                    return Forbid();
                 }
 
                 _empresaService.Delete(id);

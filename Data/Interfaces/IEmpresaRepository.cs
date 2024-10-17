@@ -6,7 +6,7 @@ namespace Buscador.Data
     public interface IEmpresaRepository
     {
         //Get
-        List<Empresa> GetAll();
+        List<GetAllEmpresaDTO> GetAll();
         public List<Empresa> BuscadorEmpresaNombre(string nombre);
         //Post
         Empresa GetById(int id);

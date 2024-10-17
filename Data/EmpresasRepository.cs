@@ -16,9 +16,36 @@ namespace Buscador.Data
         }
 
         //Get
-        public List<Empresa> GetAll()
+        public List<GetAllEmpresaDTO> GetAll()
         {
-            return _context.Empresas.ToList();
+            var empresas = _context.Empresas.Include(eca => eca.EmpresaCategorias).Include(eci => eci.EmpresasCiudades).ToList();
+
+            if (empresas is null)
+            {
+                throw new Exception($"No existen empresas.");
+            }
+
+            var empresaDTO = empresas.Select(empresa => new GetAllEmpresaDTO
+            {
+
+                IdEmpresa = empresa.IdEmpresa,
+                Nombre = empresa.Nombre,
+                Descripcion = empresa.Descripcion,
+                Direccion = empresa.Direccion,
+                Imagen = empresa.Imagen,
+                EmpresaCategorias = empresa.EmpresaCategorias.Select(eca => new IdsEmpresaCategoriaDTO
+                {
+                    IdEmpresaCategoria = eca.IdEmpresaCategoria,
+                    IdCategoria = eca.IdCategoria,
+                }).ToList(),
+                EmpresasCiudades = empresa.EmpresasCiudades.Select(eci => new IdsEmpresaCiudadDTO
+                {
+                    IdEmpresaCiudad = eci.IdEmpresaCiudad,
+                    IdCiudad = eci.IdCiudad
+                }).ToList()
+            }).ToList();
+
+            return empresaDTO;
         }
 
         public List<Empresa> BuscadorEmpresaNombre(string nombre)
@@ -48,7 +75,7 @@ namespace Buscador.Data
         public Empresa Add(AddEmpresaDTO empresa)
         {
 
-            if ( _context.Empresas.Any(e => e.Nombre == empresa.Nombre))
+            if (_context.Empresas.Any(e => e.Nombre == empresa.Nombre))
             {
                 throw new Exception($"Ya existe una empresa con el nombre {empresa.Nombre}");
             }
