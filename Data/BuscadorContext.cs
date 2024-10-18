@@ -15,11 +15,23 @@ public class BuscadorContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        // Configuración de la relación uno a muchos entre Usuario y Peticion
         modelBuilder.Entity<Peticion>()
             .HasOne(p => p.Usuario)
             .WithMany(u => u.Peticiones)
             .HasForeignKey(p => p.IdUsuario);
+
+        modelBuilder.Entity<UsuarioSuscripcion>()
+            .HasKey(us => new { us.UsuarioId, us.SuscripcionId }); // Clave compuesta
+
+        modelBuilder.Entity<UsuarioSuscripcion>()
+            .HasOne(us => us.Usuario)
+            .WithMany() // Un usuario puede tener múltiples suscripciones
+            .HasForeignKey(us => us.UsuarioId);
+
+        modelBuilder.Entity<UsuarioSuscripcion>()
+.HasOne(us => us.Suscripcion)
+.WithMany(s => s.UsuarioSuscripciones) // Una suscripción puede tener múltiples usuarios
+.HasForeignKey(us => us.SuscripcionId);
 
         modelBuilder.Entity<EmpresaCategoria>()
                         .HasOne(ec => ec.Empresa)
@@ -50,6 +62,7 @@ public class BuscadorContext : DbContext
             .HasOne(ue => ue.Empresa)
             .WithMany(e => e.UsuarioEmpresas)
             .HasForeignKey(ue => ue.IdEmpresa);
+
 
         modelBuilder.Entity<Ciudad>().HasData(
         new Ciudad { IdCiudad = 1, Nombre = "Madrid" },
@@ -251,4 +264,5 @@ public class BuscadorContext : DbContext
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Peticion> Peticiones { get; set; }
     public DbSet<UsuarioEmpresa> UsuarioEmpresas { get; set; }
+    public DbSet<Suscripcion> Suscripciones { get; set; }
 }

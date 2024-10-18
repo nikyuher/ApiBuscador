@@ -27,7 +27,6 @@ namespace Buscador.Data
 
             var empresaDTO = empresas.Select(empresa => new GetAllEmpresaDTO
             {
-
                 IdEmpresa = empresa.IdEmpresa,
                 Nombre = empresa.Nombre,
                 Descripcion = empresa.Descripcion,
@@ -74,7 +73,6 @@ namespace Buscador.Data
         //Post
         public Empresa Add(AddEmpresaDTO empresa)
         {
-
             if (_context.Empresas.Any(e => e.Nombre == empresa.Nombre))
             {
                 throw new Exception($"Ya existe una empresa con el nombre {empresa.Nombre}");
