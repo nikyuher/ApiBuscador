@@ -1,14 +1,9 @@
 namespace Buscador.Models
 {
-    public class UsuarioSuscripcion
+    public class UsuarioSuscripcionDTO
     {
         public int IdUsuarioSuscripcion { get; set; }
-        public int UsuarioId { get; set; }
-        public Usuario? Usuario { get; set; }
-
-        public int SuscripcionId { get; set; }
-        public Suscripcion? Suscripcion { get; set; }
-
+        public PutUsuarioDTO? Usuario { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaExpiracion { get; set; }
          public int DuracionMeses { get; set; }

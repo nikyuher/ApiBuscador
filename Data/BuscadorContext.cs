@@ -21,17 +21,17 @@ public class BuscadorContext : DbContext
             .HasForeignKey(p => p.IdUsuario);
 
         modelBuilder.Entity<UsuarioSuscripcion>()
-            .HasKey(us => new { us.UsuarioId, us.SuscripcionId }); // Clave compuesta
+            .HasKey(us => us.IdUsuarioSuscripcion);
 
         modelBuilder.Entity<UsuarioSuscripcion>()
             .HasOne(us => us.Usuario)
-            .WithMany() // Un usuario puede tener múltiples suscripciones
+            .WithMany()
             .HasForeignKey(us => us.UsuarioId);
 
         modelBuilder.Entity<UsuarioSuscripcion>()
-.HasOne(us => us.Suscripcion)
-.WithMany(s => s.UsuarioSuscripciones) // Una suscripción puede tener múltiples usuarios
-.HasForeignKey(us => us.SuscripcionId);
+            .HasOne(us => us.Suscripcion)
+            .WithMany(s => s.UsuarioSuscripciones)
+            .HasForeignKey(us => us.SuscripcionId);
 
         modelBuilder.Entity<EmpresaCategoria>()
                         .HasOne(ec => ec.Empresa)
@@ -265,4 +265,5 @@ public class BuscadorContext : DbContext
     public DbSet<Peticion> Peticiones { get; set; }
     public DbSet<UsuarioEmpresa> UsuarioEmpresas { get; set; }
     public DbSet<Suscripcion> Suscripciones { get; set; }
+    public DbSet<UsuarioSuscripcion> UsuarioSuscripciones { get; set; }
 }
