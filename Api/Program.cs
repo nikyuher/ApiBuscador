@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Hangfire;
+using Hangfire.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Configuración de autenticación con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -49,6 +51,20 @@ var connectionString = environment == "Docker" ?
 builder.Services.AddDbContext<BuscadorContext>(options =>
     options.UseSqlServer(connectionString));
 
+// Configurar Hangfire para usar SQL Server
+builder.Services.AddHangfire(config =>
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true
+        }));
+
 // Registro de servicios de la aplicación
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
@@ -65,12 +81,16 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPeticionRepository, PeticionRepository>();
 builder.Services.AddScoped<IPeticionService, PeticionService>();
 
+builder.Services.AddScoped<ISuscripcionRepository, SuscripcionRepository>();
+builder.Services.AddScoped<ISuscripcionService, SuscripcionService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Agregar controladores y Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHangfireServer();
 
 //Configuracion para poner tokens en el Swagger
 builder.Services.AddSwaggerGen(opt =>
@@ -116,6 +136,14 @@ app.UseAuthentication();
 // **Registrar el TokenValidationMiddleware aquí**
 app.UseTokenValidationMiddleware();
 app.UseAuthorization();
+
+app.UseHangfireDashboard();
+
+// Configurar la tarea de verificación periódica
+RecurringJob.AddOrUpdate<ISuscripcionService>(
+    "VerificarSuscripciones", 
+    service => service.VerificarSuscripciones(), 
+    Cron.Daily);  // Ejecutar cada día
 
 app.MapControllers();
 

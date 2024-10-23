@@ -1,9 +1,10 @@
 using Buscador.Models;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace Buscador.Data
+namespace Buscador.Business
 {
-    public interface ISuscripcionRepository
+    public interface ISuscripcionService
     {
         Task<List<SuscripcionDTO>> GetAll();
         Task<UsuarioTipoSuscripcionDTO> GetUsuariosSuscritosPlan(int IdSuscripcion);

@@ -9,6 +9,7 @@ namespace Buscador.Data
     public class SuscripcionRepository : ISuscripcionRepository
     {
         private readonly BuscadorContext _context;
+        private const int LoteTamaño = 1000;
 
         public SuscripcionRepository(BuscadorContext context)
         {
@@ -98,20 +99,22 @@ namespace Buscador.Data
                 throw new Exception("El usuario no existe.");
             }
 
-            var fechaExpiracion = datos.FechaInicio.AddMonths(datos.DuracionMeses);
+            var fechaInicio = DateTime.Now;
+            var fechaExpiracion = fechaInicio.AddMonths(datos.DuracionMeses);
 
             var newUsuarioSuscripcion = new UsuarioSuscripcion
             {
                 UsuarioId = datos.UsuarioId,
                 SuscripcionId = datos.SuscripcionId,
-                FechaInicio = datos.FechaInicio,
+                FechaInicio = fechaInicio,
                 FechaExpiracion = fechaExpiracion,
-                EsActiva = datos.FechaInicio <= DateTime.Now && fechaExpiracion >= DateTime.Now
+                EsActiva = true
             };
 
             await _context.UsuarioSuscripciones.AddAsync(newUsuarioSuscripcion);
             await _context.SaveChangesAsync();
         }
+
 
         //Update
 
@@ -149,6 +152,36 @@ namespace Buscador.Data
             await _context.SaveChangesAsync();
 
             return existingSuscripcion;
+        }
+
+        public async Task VerificarSuscripciones()
+        {
+            try
+            {
+                int totalUsuarios = await _context.UsuarioSuscripciones.CountAsync();
+                int lotes = (int)Math.Ceiling((double)totalUsuarios / LoteTamaño);
+
+                for (int i = 0; i < lotes; i++)
+                {
+                    var usuariosLote = await _context.UsuarioSuscripciones
+                        .Where(us => us.EsActiva && us.FechaExpiracion <= DateTime.Now)
+                        .Skip(i * LoteTamaño)
+                        .Take(LoteTamaño)
+                        .ToListAsync();
+
+                    foreach (var usuarioSuscripcion in usuariosLote)
+                    {
+                        usuarioSuscripcion.EsActiva = false;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log exception details
+                throw new Exception($"Error al verificar las suscripciones.{ex}");
+            }
         }
 
         public void SaveChanges()
