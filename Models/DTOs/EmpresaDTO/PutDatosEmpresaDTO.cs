@@ -12,6 +12,10 @@ public class PutDatosEmpresaDTO
     public string? Descripcion { get; set; }
     [Required]
     public string? Direccion { get; set; }
+    public int Telefono { get; set; }
+    public string? CorreoEmpresa { get; set; }
+    [Required]
+    public string? SitioWeb { get; set; }
     public string? Imagen { get; set; }
 
 }
