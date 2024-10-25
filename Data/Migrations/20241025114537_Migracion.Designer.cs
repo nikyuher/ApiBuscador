@@ -3,7 +3,6 @@ using System;
 using Buscador.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,17 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Buscador.Data.Migrations
 {
     [DbContext(typeof(BuscadorContext))]
-    [Migration("20241009091237_AddPasswordReserGmail")]
-    partial class AddPasswordReserGmail
+    [Migration("20241025114537_Migracion")]
+    partial class Migracion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Buscador.Models.Categoria", b =>
                 {
@@ -30,11 +27,9 @@ namespace Buscador.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategoria"), 1L, 1);
-
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("IdCategoria");
 
@@ -134,11 +129,9 @@ namespace Buscador.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCiudad"), 1L, 1);
-
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("IdCiudad");
 
@@ -303,24 +296,32 @@ namespace Buscador.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpresa"), 1L, 1);
+                    b.Property<string>("CorreoEmpresa")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Imagen")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int?>("PeticionIdPeticion")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SitioWeb")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Telefono")
                         .HasColumnType("int");
 
                     b.HasKey("IdEmpresa");
@@ -333,290 +334,398 @@ namespace Buscador.Data.Migrations
                         new
                         {
                             IdEmpresa = 1,
+                            CorreoEmpresa = "contacto@inditex.com",
                             Descripcion = "Líder mundial en distribución de moda.",
                             Direccion = "Av. de la Diputación, 15142 Arteijo, La Coruña",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/inditexLC.jpg?updatedAt=1726649179851",
-                            Nombre = "Inditex"
+                            Nombre = "Inditex",
+                            SitioWeb = "https://www.inditex.com",
+                            Telefono = 981123456
                         },
                         new
                         {
                             IdEmpresa = 2,
+                            CorreoEmpresa = "contacto@santander.com",
                             Descripcion = "Una de las mayores entidades bancarias del mundo.",
                             Direccion = "Ciudad Grupo Santander, 28660 Boadilla del Monte, Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/santander.jpg?updatedAt=1726649877238",
-                            Nombre = "Banco Santander"
+                            Nombre = "Banco Santander",
+                            SitioWeb = "https://www.bancosantander.es",
+                            Telefono = 915123456
                         },
                         new
                         {
                             IdEmpresa = 3,
+                            CorreoEmpresa = "info@telefonica.com",
                             Descripcion = "Multinacional española de telecomunicaciones.",
                             Direccion = "Distrito Telefónica, 28050 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/telefonica.jpg?updatedAt=1726649877081",
-                            Nombre = "Telefónica"
+                            Nombre = "Telefónica",
+                            SitioWeb = "https://www.telefonica.com",
+                            Telefono = 914123456
                         },
                         new
                         {
                             IdEmpresa = 4,
+                            CorreoEmpresa = "contacto@iberdrola.com",
                             Descripcion = "Una de las mayores empresas energéticas del mundo.",
                             Direccion = "Plaza Euskadi 5, 48009 Bilbao",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/iberdrola-.jpg?updatedAt=1726649877427",
-                            Nombre = "Iberdrola"
+                            Nombre = "Iberdrola",
+                            SitioWeb = "https://www.iberdrola.com",
+                            Telefono = 944123456
                         },
                         new
                         {
                             IdEmpresa = 5,
+                            CorreoEmpresa = "info@repsol.com",
                             Descripcion = "Empresa energética multinacional española.",
                             Direccion = "Calle Méndez Álvaro, 44, 28045 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/repsol.webp?updatedAt=1726649877458",
-                            Nombre = "Repsol"
+                            Nombre = "Repsol",
+                            SitioWeb = "https://www.repsol.com",
+                            Telefono = 915678910
                         },
                         new
                         {
                             IdEmpresa = 6,
+                            CorreoEmpresa = "atencioncliente@elcorteingles.es",
                             Descripcion = "Cadena de grandes almacenes más grande de Europa.",
                             Direccion = "Calle Hermosilla, 112, 28009 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/elcorteingles.jpeg?updatedAt=1726649879087",
-                            Nombre = "El Corte Inglés"
+                            Nombre = "El Corte Inglés",
+                            SitioWeb = "https://www.elcorteingles.es",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 7,
+                            CorreoEmpresa = "info@caixabank.com",
                             Descripcion = "Uno de los bancos más importantes de España.",
                             Direccion = "Av. Diagonal, 621, 08028 Barcelona",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/caixabanck.jpg?updatedAt=1726649879170",
-                            Nombre = "CaixaBank"
+                            Nombre = "CaixaBank",
+                            SitioWeb = "https://www.caixabank.es",
+                            Telefono = 936123456
                         },
                         new
                         {
                             IdEmpresa = 8,
+                            CorreoEmpresa = "contacto@seat.com",
                             Descripcion = "Fabricante de automóviles con sede en Martorell.",
                             Direccion = "Autovía A-2, Km 585, 08760 Martorell, Barcelona",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/seat.jpg?updatedAt=1726649876969",
-                            Nombre = "Seat"
+                            Nombre = "Seat",
+                            SitioWeb = "https://www.seat.com",
+                            Telefono = 936123456
                         },
                         new
                         {
                             IdEmpresa = 9,
+                            CorreoEmpresa = "info@aena.es",
                             Descripcion = "Gestión de aeropuertos en España y en el mundo.",
                             Direccion = "Calle Peonías, 12, 28042 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/aena-aeropuerto.jpg?updatedAt=1726649877286",
-                            Nombre = "Aena"
+                            Nombre = "Aena",
+                            SitioWeb = "https://www.aena.es",
+                            Telefono = 915678910
                         },
                         new
                         {
                             IdEmpresa = 10,
+                            CorreoEmpresa = "contacto@ferrovial.com",
                             Descripcion = "Empresa global de infraestructuras y servicios.",
                             Direccion = "Calle Príncipe de Vergara, 135, 28002 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/ferrovial.jpeg?updatedAt=1726649879406",
-                            Nombre = "Ferrovial"
+                            Nombre = "Ferrovial",
+                            SitioWeb = "https://www.ferrovial.com",
+                            Telefono = 915678910
                         },
                         new
                         {
                             IdEmpresa = 11,
+                            CorreoEmpresa = "info@mapfre.com",
                             Descripcion = "Compañía de seguros global.",
                             Direccion = "Carretera de Pozuelo, 52, 28220 Majadahonda, Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/mafre.jpg?updatedAt=1726649877454",
-                            Nombre = "Mapfre"
+                            Nombre = "Mapfre",
+                            SitioWeb = "https://www.mapfre.com",
+                            Telefono = 914123456
                         },
                         new
                         {
                             IdEmpresa = 12,
+                            CorreoEmpresa = "contacto@acciona.com",
                             Descripcion = "Líder en energías renovables y construcción sostenible.",
                             Direccion = "Avenida de Europa, 18, 28108 Alcobendas, Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/acciona.webp?updatedAt=1726649877393",
-                            Nombre = "Acciona"
+                            Nombre = "Acciona",
+                            SitioWeb = "https://www.acciona.com",
+                            Telefono = 916123456
                         },
                         new
                         {
                             IdEmpresa = 13,
+                            CorreoEmpresa = "atencioncliente@bbva.com",
                             Descripcion = "Multinacional de banca y servicios financieros.",
                             Direccion = "Calle Azul, 4, 28050 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/BBVA.jpg?updatedAt=1726649879175",
-                            Nombre = "BBVA"
+                            Nombre = "BBVA",
+                            SitioWeb = "https://www.bbva.es",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 14,
+                            CorreoEmpresa = "contacto@amadeus.com",
                             Descripcion = "Proveedor líder de tecnología en la industria del viaje.",
                             Direccion = "Calle Salvador de Madariaga, 1, 28027 Madrid",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/amadeus.jpg?updatedAt=1726649879691",
-                            Nombre = "Amadeus"
+                            Nombre = "Amadeus",
+                            SitioWeb = "https://www.amadeus.com",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 15,
+                            CorreoEmpresa = "info@grifols.com",
                             Descripcion = "Líder global en el sector de los hemoderivados.",
                             Direccion = "Calle Jesús i Maria, 6, 08022 Barcelona",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/grifols.jpg?updatedAt=1726649877212",
-                            Nombre = "Grifols"
+                            Nombre = "Grifols",
+                            SitioWeb = "https://www.grifols.com",
+                            Telefono = 932123456
                         },
                         new
                         {
                             IdEmpresa = 16,
+                            CorreoEmpresa = "contacto@zara.com",
                             Descripcion = "Una de las mayores marcas de moda del mundo.",
                             Direccion = "Av. de la Diputación, 15142 Arteijo, La Coruña",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/zara.jpg?updatedAt=1726649877219",
-                            Nombre = "Zara"
+                            Nombre = "Zara",
+                            SitioWeb = "https://www.zara.com",
+                            Telefono = 981123456
                         },
                         new
                         {
                             IdEmpresa = 17,
+                            CorreoEmpresa = "atencioncliente@mercadona.es",
                             Descripcion = "Cadena de supermercados líder en España.",
                             Direccion = "Calle Valencia, 5, 46016 Tavernes Blanques, Valencia",
                             Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/mercadona.jpg?updatedAt=1726649879213",
-                            Nombre = "Mercadona"
+                            Nombre = "Mercadona",
+                            SitioWeb = "https://www.mercadona.es",
+                            Telefono = 961123456
                         },
                         new
                         {
                             IdEmpresa = 18,
-                            Descripcion = "Cadena de hoteles con presencia internacional.",
-                            Direccion = "Calle Gremio Toneleros, 24, 07009 Palma, Islas Baleares",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/meliahotels.jpg?updatedAt=1726649879218",
-                            Nombre = "Meliá Hotels"
+                            CorreoEmpresa = "contacto@repsol.com",
+                            Descripcion = "Multinacional energética con operaciones en 30 países.",
+                            Direccion = "Calle Méndez Álvaro, 44, 28045 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/repsol.webp?updatedAt=1726649877458",
+                            Nombre = "Repsol",
+                            SitioWeb = "https://www.repsol.com",
+                            Telefono = 915678910
                         },
                         new
                         {
                             IdEmpresa = 19,
-                            Descripcion = "Empresa multinacional de gas y electricidad.",
-                            Direccion = "Avenida de América, 38, 28028 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/naturgy.jpg?updatedAt=1726649879220",
-                            Nombre = "Naturgy"
+                            CorreoEmpresa = "info@orange.es",
+                            Descripcion = "Compañía multinacional de telecomunicaciones.",
+                            Direccion = "Calle Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/orange.jpg?updatedAt=1726649877392",
+                            Nombre = "Orange",
+                            SitioWeb = "https://www.orange.es",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 20,
-                            Descripcion = "Empresa de construcción y servicios.",
-                            Direccion = "Calle Federico Salmón, 13, 28016 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/fcc.jpg?updatedAt=1726649879225",
-                            Nombre = "FCC"
+                            CorreoEmpresa = "info@vodafone.es",
+                            Descripcion = "Proveedor global de telecomunicaciones.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/vodafone.jpg?updatedAt=1726649877234",
+                            Nombre = "Vodafone",
+                            SitioWeb = "https://www.vodafone.es",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 21,
-                            Descripcion = "Multinacional en construcción e infraestructuras.",
-                            Direccion = "Calle Condesa de Venadito, 7, 28027 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/sacyr.jpg?updatedAt=1726649879229",
-                            Nombre = "Sacyr"
+                            CorreoEmpresa = "info@nh-hotels.com",
+                            Descripcion = "Cadena de hoteles internacional.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/nh.jpg?updatedAt=1726649877215",
+                            Nombre = "NH Hotel Group",
+                            SitioWeb = "https://www.nh-hotels.com",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 22,
-                            Descripcion = "Operador europeo de infraestructuras de telecomunicaciones.",
-                            Direccion = "Calle Juan Esplandiú, 11, 28007 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/cellnex.jpg?updatedAt=1726649879231",
-                            Nombre = "Cellnex"
+                            CorreoEmpresa = "contacto@accenture.com",
+                            Descripcion = "Consultora de gestión y tecnología.",
+                            Direccion = "Calle Príncipe de Vergara, 1, 28001 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/accenture.jpg?updatedAt=1726649877216",
+                            Nombre = "Accenture",
+                            SitioWeb = "https://www.accenture.com",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 23,
-                            Descripcion = "Grupo turístico líder en España.",
-                            Direccion = "Calle de la Cruz, 1, 28760 Tres Cantos, Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/globalia.jpg?updatedAt=1726649879233",
-                            Nombre = "Globalia"
+                            CorreoEmpresa = "info@capgemini.com",
+                            Descripcion = "Consultora de servicios de tecnología y outsourcing.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/capgemini.jpg?updatedAt=1726649877287",
+                            Nombre = "Capgemini",
+                            SitioWeb = "https://www.capgemini.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 24,
-                            Descripcion = "Líder mundial en envolturas alimentarias.",
-                            Direccion = "Polígono Industrial Berroa, 15, 31192 Tajonar, Navarra",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/viscofan.jpg?updatedAt=1726649879236",
-                            Nombre = "Viscofan"
+                            CorreoEmpresa = "info@everis.com",
+                            Descripcion = "Consultoría y outsourcing de TI.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/everis.jpg?updatedAt=1726649877241",
+                            Nombre = "Everis",
+                            SitioWeb = "https://www.everis.com",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 25,
-                            Descripcion = "Multinacional de energía.",
-                            Direccion = "Torre Cepsa, Paseo de la Castellana, 259A, 28046 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/cepsa.jpg?updatedAt=1726649879240",
-                            Nombre = "Cepsa"
+                            CorreoEmpresa = "contacto@grupoantolin.com",
+                            Descripcion = "Fabricante de componentes para el sector automotriz.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/grupoantolin.jpg?updatedAt=1726649877217",
+                            Nombre = "Grupo Antolin",
+                            SitioWeb = "https://www.grupoantolin.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 26,
-                            Descripcion = "Empresa líder en seguridad privada.",
-                            Direccion = "Calle Pajaritos, 24, 28007 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/prosegur.jpg?updatedAt=1726649879245",
-                            Nombre = "Prosegur"
+                            CorreoEmpresa = "info@sacyr.com",
+                            Descripcion = "Grupo líder en construcción e ingeniería.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/sacyr.jpg?updatedAt=1726649877261",
+                            Nombre = "Sacyr",
+                            SitioWeb = "https://www.sacyr.com",
+                            Telefono = 917123456
                         },
                         new
                         {
                             IdEmpresa = 27,
-                            Descripcion = "Multinacional de consultoría y tecnología.",
-                            Direccion = "Avenida de Bruselas, 35, 28108 Alcobendas, Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/indra.jpg?updatedAt=1726649879249",
-                            Nombre = "Indra"
+                            CorreoEmpresa = "info@ferrovial.com",
+                            Descripcion = "Empresa global de infraestructuras y servicios.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/ferrovial.jpg?updatedAt=1726649877240",
+                            Nombre = "Ferrovial",
+                            SitioWeb = "https://www.ferrovial.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 28,
-                            Descripcion = "Empresa líder en el sector inmobiliario.",
-                            Direccion = "Paseo de la Castellana, 163, 28046 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/colonial.jpg?updatedAt=1726649879252",
-                            Nombre = "Colonial"
+                            CorreoEmpresa = "contacto@boeing.com",
+                            Descripcion = "Fabricante de aviones y tecnología aeroespacial.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/boeing.jpg?updatedAt=1726649877218",
+                            Nombre = "Boeing",
+                            SitioWeb = "https://www.boeing.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 29,
-                            Descripcion = "Cadena hotelera con presencia internacional.",
-                            Direccion = "Calle Santa Engracia, 120, 28003 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/nhhotelgroup.jpg?updatedAt=1726649879256",
-                            Nombre = "NH Hotel Group"
+                            CorreoEmpresa = "info@ge.com",
+                            Descripcion = "Conglomerado industrial de energía y tecnología.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/ge.jpg?updatedAt=1726649877254",
+                            Nombre = "General Electric",
+                            SitioWeb = "https://www.ge.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 30,
-                            Descripcion = "Líder en el sector alimentario.",
-                            Direccion = "Calle del Prado, 6, 28014 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/ebrofoods.jpg?updatedAt=1726649879261",
-                            Nombre = "Ebro Foods"
+                            CorreoEmpresa = "info@siemens.com",
+                            Descripcion = "Multinacional de tecnología e ingeniería.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/siemens.jpg?updatedAt=1726649877467",
+                            Nombre = "Siemens",
+                            SitioWeb = "https://www.siemens.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 31,
-                            Descripcion = "Compañía farmacéutica internacional.",
-                            Direccion = "Ronda General Mitre, 151, 08022 Barcelona",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/almirall.jpg?updatedAt=1726649879266",
-                            Nombre = "Almirall"
+                            CorreoEmpresa = "info@bosch.com",
+                            Descripcion = "Multinacional alemana de ingeniería y tecnología.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/bosch.jpg?updatedAt=1726649877236",
+                            Nombre = "Bosch",
+                            SitioWeb = "https://www.bosch.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 32,
-                            Descripcion = "Empresa farmacéutica especializada en productos inyectables.",
-                            Direccion = "Calle Julián Camarillo, 35, 28037 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/rovi.jpg?updatedAt=1726649879270",
-                            Nombre = "Rovi"
+                            CorreoEmpresa = "info@honda.com",
+                            Descripcion = "Fabricante de automóviles y motocicletas.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/honda.jpg?updatedAt=1726649877452",
+                            Nombre = "Honda",
+                            SitioWeb = "https://www.honda.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 33,
-                            Descripcion = "Operador líder en transporte de pasajeros.",
-                            Direccion = "Calle Miguel Fleta, 4, 28037 Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/alsa.jpg?updatedAt=1726649879275",
-                            Nombre = "Alsa"
+                            CorreoEmpresa = "contacto@coca-cola.com",
+                            Descripcion = "Multinacional de bebidas no alcohólicas.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/coca-cola.jpg?updatedAt=1726649877492",
+                            Nombre = "Coca-Cola",
+                            SitioWeb = "https://www.coca-cola.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 34,
-                            Descripcion = "Multinacional de productos de colágeno y envolturas.",
-                            Direccion = "Polígono Berroa, 15, 31192 Tajonar, Navarra",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/viscofan.jpg?updatedAt=1726649879279",
-                            Nombre = "Viscofan"
+                            CorreoEmpresa = "info@pepsi.com",
+                            Descripcion = "Compañía de bebidas no alcohólicas.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/pepsi.jpg?updatedAt=1726649877214",
+                            Nombre = "Pepsi",
+                            SitioWeb = "https://www.pepsi.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 35,
-                            Descripcion = "Empresa farmacéutica especializada en productos oncológicos.",
-                            Direccion = "Avenida de los Reyes, 1, 28760 Tres Cantos, Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/pharmamar.jpg?updatedAt=1726649879283",
-                            Nombre = "Pharmamar"
+                            CorreoEmpresa = "contacto@nestle.com",
+                            Descripcion = "Líder mundial en alimentos y bebidas.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/nestle.jpg?updatedAt=1726649877248",
+                            Nombre = "Nestlé",
+                            SitioWeb = "https://www.nestle.com",
+                            Telefono = 912123456
                         },
                         new
                         {
                             IdEmpresa = 36,
-                            Descripcion = "Distribuidora líder en el sur de Europa.",
-                            Direccion = "Avenida de la Vega, 1, 28108 Alcobendas, Madrid",
-                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/logista.jpg?updatedAt=1726649879286",
-                            Nombre = "Logista"
+                            CorreoEmpresa = "info@danone.com",
+                            Descripcion = "Compañía multinacional de productos lácteos.",
+                            Direccion = "Calle de Vallehermoso, 79, 28015 Madrid",
+                            Imagen = "https://ik.imagekit.io/Mariocanizares/Empresas/danone.jpg?updatedAt=1726649877223",
+                            Nombre = "Danone",
+                            SitioWeb = "https://www.danone.com",
+                            Telefono = 912123456
                         });
                 });
 
@@ -625,8 +734,6 @@ namespace Buscador.Data.Migrations
                     b.Property<int>("IdEmpresaCategoria")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpresaCategoria"), 1L, 1);
 
                     b.Property<int>("IdCategoria")
                         .HasColumnType("int");
@@ -866,8 +973,6 @@ namespace Buscador.Data.Migrations
                     b.Property<int>("IdEmpresaCiudad")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpresaCiudad"), 1L, 1);
 
                     b.Property<int>("IdCiudad")
                         .HasColumnType("int");
@@ -1180,15 +1285,13 @@ namespace Buscador.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPeticion"), 1L, 1);
-
                     b.Property<string>("DescripcionEmpresa")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("DireccionEmpresa")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("IdCategoriaEmpresa")
                         .HasColumnType("int");
@@ -1200,11 +1303,11 @@ namespace Buscador.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImagenEmpresaURL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NombreEmpresa")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("IdPeticion");
 
@@ -1213,37 +1316,57 @@ namespace Buscador.Data.Migrations
                     b.ToTable("Peticiones");
                 });
 
+            modelBuilder.Entity("Buscador.Models.Suscripcion", b =>
+                {
+                    b.Property<int>("IdSuscripcion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TipoPlan")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("IdSuscripcion");
+
+                    b.ToTable("Suscripciones");
+                });
+
             modelBuilder.Entity("Buscador.Models.Usuario", b =>
                 {
                     b.Property<int>("IdUsuario")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"), 1L, 1);
-
                     b.Property<string>("Contrasena")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Correo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("PasswordChangedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("PasswordResetCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime?>("PasswordResetCodeExpiry")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("Rol")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("IdUsuario");
 
@@ -1255,8 +1378,6 @@ namespace Buscador.Data.Migrations
                     b.Property<int>("IdUsuarioEmpresa")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuarioEmpresa"), 1L, 1);
 
                     b.Property<int>("IdEmpresa")
                         .HasColumnType("int");
@@ -1271,6 +1392,39 @@ namespace Buscador.Data.Migrations
                     b.HasIndex("IdUsuario");
 
                     b.ToTable("UsuarioEmpresas");
+                });
+
+            modelBuilder.Entity("Buscador.Models.UsuarioSuscripcion", b =>
+                {
+                    b.Property<int>("IdUsuarioSuscripcion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("DuracionMeses")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EsActiva")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SuscripcionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdUsuarioSuscripcion");
+
+                    b.HasIndex("SuscripcionId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("UsuarioSuscripciones");
                 });
 
             modelBuilder.Entity("Buscador.Models.Empresa", b =>
@@ -1350,6 +1504,25 @@ namespace Buscador.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("Buscador.Models.UsuarioSuscripcion", b =>
+                {
+                    b.HasOne("Buscador.Models.Suscripcion", "Suscripcion")
+                        .WithMany("UsuarioSuscripciones")
+                        .HasForeignKey("SuscripcionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Buscador.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Suscripcion");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Buscador.Models.Categoria", b =>
                 {
                     b.Navigation("EmpresaCategorias");
@@ -1367,6 +1540,11 @@ namespace Buscador.Data.Migrations
                     b.Navigation("EmpresasCiudades");
 
                     b.Navigation("UsuarioEmpresas");
+                });
+
+            modelBuilder.Entity("Buscador.Models.Suscripcion", b =>
+                {
+                    b.Navigation("UsuarioSuscripciones");
                 });
 
             modelBuilder.Entity("Buscador.Models.Usuario", b =>

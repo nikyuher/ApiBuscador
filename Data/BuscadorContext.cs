@@ -255,7 +255,7 @@ public class BuscadorContext : DbContext
 
     }
 
-    public DbSet<Ciudad> Ciudadades { get; set; }
+    public DbSet<Ciudad> Ciudadades { get; set; } 
     public DbSet<Empresa> Empresas { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
 

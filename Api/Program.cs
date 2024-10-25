@@ -8,12 +8,16 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Hangfire;
 using Hangfire.SqlServer;
+using MySqlConnector;
+using System.Data;
+using System.Transactions;
+using Hangfire.MySql;
 using Serilog.Events;
 
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Hangfire", LogEventLevel.Debug)
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .CreateLogger();
@@ -57,22 +61,39 @@ var connectionString = environment == "Docker" ?
     configuration.GetConnectionString("BuscadorDBlocal");
 
 // Registrar DbContext con la cadena de conexiónb
+// builder.Services.AddDbContext<BuscadorContext>(options =>
+//     options.UseSqlServer(connectionString));
+
 builder.Services.AddDbContext<BuscadorContext>(options =>
-    options.UseSqlServer(connectionString));
+options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 32))));
 
 // Configurar Hangfire para usar SQL Server
+// builder.Services.AddHangfire(config =>
+//     config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+//         .UseSimpleAssemblyNameTypeSerializer()
+//         .UseRecommendedSerializerSettings()
+//         .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+//         {
+//             CommandBatchMaxTimeout = TimeSpan.FromMinutes(10),
+//             SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+//             QueuePollInterval = TimeSpan.Zero,
+//             UseRecommendedIsolationLevel = true,
+//             DisableGlobalLocks = true
+//         }));
+
+// Configurar Hangfire para usar MySQL
 builder.Services.AddHangfire(config =>
+{
     config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-        .UseSimpleAssemblyNameTypeSerializer()
-        .UseRecommendedSerializerSettings()
-        .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
-        {
-            CommandBatchMaxTimeout = TimeSpan.FromMinutes(10),
-            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-            QueuePollInterval = TimeSpan.Zero,
-            UseRecommendedIsolationLevel = true,
-            DisableGlobalLocks = true
-        }));
+          .UseSimpleAssemblyNameTypeSerializer()
+          .UseRecommendedSerializerSettings()
+          .UseStorage(new MySqlStorage(connectionString, new MySqlStorageOptions
+          {
+              TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted,
+              QueuePollInterval = TimeSpan.FromSeconds(15)
+          }));
+});
+
 
 // Registro de servicios de la aplicación
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
@@ -95,9 +116,13 @@ builder.Services.AddScoped<ISuscripcionService, SuscripcionService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<CustomAuthorizationFilter>();
 
 // Agregar controladores y Swagger
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<CustomAuthorizationFilter>(); // Aplica el filtro a todos los controladores
+});;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHangfireServer();
 builder.Host.UseSerilog();
@@ -144,32 +169,23 @@ app.UseCors(policyBuilder => policyBuilder
     .AllowAnyHeader());
 
 app.UseAuthentication();
-// **Registrar el TokenValidationMiddleware aquí**
 app.UseTokenValidationMiddleware();
 app.UseAuthorization();
 
-try
+if (environment == "Docker")
 {
-    if (environment == "Docker")
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
     {
-        app.UseHangfireDashboard("/hangfire", new DashboardOptions
-        {
-            Authorization = new[] { new AllowAllUsersAuthorizationFilter() }
-        });
-    }
-    else
-    {
-        app.UseHangfireDashboard();
-    }
-
-    app.MapHangfireDashboard();
-    Log.Information("Hangfire dashboard está configurado correctamente.");
+        Authorization = new[] { new AllowAllUsersAuthorizationFilter() }
+    });
 }
-catch (Exception ex)
+else
 {
-    Log.Error(ex, "Error al configurar Hangfire.");
+    app.UseHangfireDashboard();
 }
 
+app.MapHangfireDashboard();
+Log.Information("Hangfire dashboard está configurado correctamente.");
 
 app.MapControllers();
 
@@ -177,7 +193,7 @@ app.MapControllers();
 RecurringJob.AddOrUpdate<ISuscripcionService>(
     "VerificarSuscripciones",
     service => service.VerificarSuscripciones(),
-    Cron.Daily);  // Ejecutar cada día
+    Cron.Daily);
 
 
 using (var scope = app.Services.CreateScope())

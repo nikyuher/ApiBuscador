@@ -1,15 +1,23 @@
 namespace Buscador.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class Peticion
 
 {
     [Key]
     public int IdPeticion { get; set; }
+    
     [Required]
+    [Column(TypeName = "varchar(255)")]
     public string? NombreEmpresa { get; set; }
+
     [Required]
+    [Column(TypeName = "text")]
     public string? DescripcionEmpresa { get; set; }
+
     [Required]
+    [Column(TypeName = "varchar(255)")]
     public string? DireccionEmpresa { get; set; }
     public string? ImagenEmpresaURL { get; set; }
 
