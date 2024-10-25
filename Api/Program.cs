@@ -6,9 +6,20 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Hangfire;
+using Hangfire.SqlServer;
+using Serilog.Events;
 
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Configuración de autenticación con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -45,9 +56,23 @@ var connectionString = environment == "Docker" ?
     configuration.GetConnectionString("BuscadorDB") :
     configuration.GetConnectionString("BuscadorDBlocal");
 
-// Registrar DbContext con la cadena de conexión
+// Registrar DbContext con la cadena de conexiónb
 builder.Services.AddDbContext<BuscadorContext>(options =>
     options.UseSqlServer(connectionString));
+
+// Configurar Hangfire para usar SQL Server
+builder.Services.AddHangfire(config =>
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(10),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true
+        }));
 
 // Registro de servicios de la aplicación
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
@@ -65,13 +90,17 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPeticionRepository, PeticionRepository>();
 builder.Services.AddScoped<IPeticionService, PeticionService>();
 
+builder.Services.AddScoped<ISuscripcionRepository, SuscripcionRepository>();
+builder.Services.AddScoped<ISuscripcionService, SuscripcionService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Agregar controladores y Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddHangfireServer();
+builder.Host.UseSerilog();
 //Configuracion para poner tokens en el Swagger
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -104,6 +133,8 @@ builder.Services.AddSwaggerGen(opt =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
 // Configurar middleware
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -117,7 +148,37 @@ app.UseAuthentication();
 app.UseTokenValidationMiddleware();
 app.UseAuthorization();
 
+try
+{
+    if (environment == "Docker")
+    {
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            Authorization = new[] { new AllowAllUsersAuthorizationFilter() }
+        });
+    }
+    else
+    {
+        app.UseHangfireDashboard();
+    }
+
+    app.MapHangfireDashboard();
+    Log.Information("Hangfire dashboard está configurado correctamente.");
+}
+catch (Exception ex)
+{
+    Log.Error(ex, "Error al configurar Hangfire.");
+}
+
+
 app.MapControllers();
+
+// Configurar la tarea de verificación periódica
+RecurringJob.AddOrUpdate<ISuscripcionService>(
+    "VerificarSuscripciones",
+    service => service.VerificarSuscripciones(),
+    Cron.Daily);  // Ejecutar cada día
+
 
 using (var scope = app.Services.CreateScope())
 {

@@ -27,11 +27,13 @@ namespace Buscador.Data
 
             var empresaDTO = empresas.Select(empresa => new GetAllEmpresaDTO
             {
-
                 IdEmpresa = empresa.IdEmpresa,
                 Nombre = empresa.Nombre,
                 Descripcion = empresa.Descripcion,
                 Direccion = empresa.Direccion,
+                Telefono = empresa.Telefono,
+                CorreoEmpresa = empresa.CorreoEmpresa,
+                SitioWeb = empresa.SitioWeb,
                 Imagen = empresa.Imagen,
                 EmpresaCategorias = empresa.EmpresaCategorias.Select(eca => new IdsEmpresaCategoriaDTO
                 {
@@ -74,7 +76,6 @@ namespace Buscador.Data
         //Post
         public Empresa Add(AddEmpresaDTO empresa)
         {
-
             if (_context.Empresas.Any(e => e.Nombre == empresa.Nombre))
             {
                 throw new Exception($"Ya existe una empresa con el nombre {empresa.Nombre}");
@@ -85,6 +86,9 @@ namespace Buscador.Data
                 Nombre = empresa.Nombre,
                 Descripcion = empresa.Descripcion,
                 Direccion = empresa.Direccion,
+                Telefono = empresa.Telefono,
+                CorreoEmpresa = empresa.CorreoEmpresa,
+                SitioWeb = empresa.SitioWeb,
                 Imagen = empresa.Imagen
             };
             _context.Empresas.Add(newEmpresa);
@@ -148,6 +152,9 @@ namespace Buscador.Data
                 existingEmpresa.Nombre = empresaDto.Nombre;
                 existingEmpresa.Descripcion = empresaDto.Descripcion;
                 existingEmpresa.Direccion = empresaDto.Direccion;
+                existingEmpresa.Telefono = empresaDto.Telefono;
+                existingEmpresa.CorreoEmpresa = empresaDto.CorreoEmpresa;
+                existingEmpresa.SitioWeb = empresaDto.SitioWeb;
                 existingEmpresa.Imagen = empresaDto.Imagen;
 
                 _context.Entry(existingEmpresa).State = EntityState.Modified;

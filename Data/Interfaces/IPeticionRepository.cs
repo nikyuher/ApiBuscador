@@ -7,7 +7,7 @@ namespace Buscador.Data
     {
         public List<PeticionDTO> GetAll();
         public AddPeticionDTO AddPeticion(AddPeticionDTO peticionDTO);
-        void AceptarPeticion(int idPeticion);
+        Task AceptarPeticionAsync(int idPeticion);
         void DeletePeticion(int idPeticion);
 
 

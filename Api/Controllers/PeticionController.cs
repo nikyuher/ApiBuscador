@@ -71,12 +71,12 @@ namespace Buscador.Api.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("validar", Name = "AceptarPeticion")]
-        public ActionResult AceptarPeticion(int peticionId)
+        public async Task<IActionResult> AceptarPeticion(int peticionId)
         {
             try
             {
                 _logger.LogInformation($"Solicitud para aceptar la petición con ID: {peticionId}");
-                _peticionService.AceptarPeticion(peticionId);
+                await _peticionService.AceptarPeticionAsync(peticionId);
                 _logger.LogInformation($"Petición con ID: {peticionId} aceptada exitosamente.");
                 return Ok();
             }

@@ -13,7 +13,7 @@ public class Usuario
     [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
     public string Correo { get; set; }
     public bool Rol { get; set; }
-    public string? PasswordResetCode { get; set; } 
+    public string? PasswordResetCode { get; set; }
     public DateTime? PasswordResetCodeExpiry { get; set; }
     public DateTime PasswordChangedAt { get; set; }
     public List<Peticion> Peticiones { get; set; } = new List<Peticion>();

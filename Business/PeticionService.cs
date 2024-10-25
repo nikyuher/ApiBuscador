@@ -24,9 +24,9 @@ namespace Buscador.Business
             return _peticionService.AddPeticion(peticionDTO);
         }
 
-        public void AceptarPeticion(int idPeticion)
+        public async Task AceptarPeticionAsync(int idPeticion)
         {
-            _peticionService.AceptarPeticion(idPeticion);
+            await _peticionService.AceptarPeticionAsync(idPeticion);
         }
 
 
