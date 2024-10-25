@@ -8,6 +8,15 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Hangfire;
 using Hangfire.SqlServer;
+using Serilog.Events;
+
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +56,7 @@ var connectionString = environment == "Docker" ?
     configuration.GetConnectionString("BuscadorDB") :
     configuration.GetConnectionString("BuscadorDBlocal");
 
-// Registrar DbContext con la cadena de conexión
+// Registrar DbContext con la cadena de conexiónb
 builder.Services.AddDbContext<BuscadorContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -58,7 +67,7 @@ builder.Services.AddHangfire(config =>
         .UseRecommendedSerializerSettings()
         .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
         {
-            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(10),
             SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
             QueuePollInterval = TimeSpan.Zero,
             UseRecommendedIsolationLevel = true,
@@ -91,7 +100,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHangfireServer();
-
+builder.Host.UseSerilog();
 //Configuracion para poner tokens en el Swagger
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -124,6 +133,8 @@ builder.Services.AddSwaggerGen(opt =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
 // Configurar middleware
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -137,15 +148,37 @@ app.UseAuthentication();
 app.UseTokenValidationMiddleware();
 app.UseAuthorization();
 
-app.UseHangfireDashboard();
+try
+{
+    if (environment == "Docker")
+    {
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            Authorization = new[] { new AllowAllUsersAuthorizationFilter() }
+        });
+    }
+    else
+    {
+        app.UseHangfireDashboard();
+    }
+
+    app.MapHangfireDashboard();
+    Log.Information("Hangfire dashboard está configurado correctamente.");
+}
+catch (Exception ex)
+{
+    Log.Error(ex, "Error al configurar Hangfire.");
+}
+
+
+app.MapControllers();
 
 // Configurar la tarea de verificación periódica
 RecurringJob.AddOrUpdate<ISuscripcionService>(
-    "VerificarSuscripciones", 
-    service => service.VerificarSuscripciones(), 
+    "VerificarSuscripciones",
+    service => service.VerificarSuscripciones(),
     Cron.Daily);  // Ejecutar cada día
 
-app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {

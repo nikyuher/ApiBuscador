@@ -9,7 +9,7 @@ namespace Buscador.Business
         public List<PeticionDTO> GetAll();
         //Post
         public AddPeticionDTO AddPeticion(AddPeticionDTO peticionDTO);
-        void AceptarPeticion(int idPeticion);
+        Task AceptarPeticionAsync(int idPeticion);
         //Delete
         void DeletePeticion(int idPeticion);
     }
