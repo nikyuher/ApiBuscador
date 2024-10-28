@@ -119,10 +119,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<CustomAuthorizationFilter>();
 
 // Agregar controladores y Swagger
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<CustomAuthorizationFilter>(); // Aplica el filtro a todos los controladores
-});;
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHangfireServer();
 builder.Host.UseSerilog();
