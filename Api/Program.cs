@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -14,19 +15,25 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
+Env.Load("../.env");
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Configuración de autenticación con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
         // Obteniendo los valores de configuración
-        var validIssuer = builder.Configuration["JWT:ValidIssuer"];
-        var validAudience = builder.Configuration["JWT:ValidAudience"];
-        var secret = builder.Configuration["JWT:SecretKey"];
+        var validAudience = Environment.GetEnvironmentVariable("JWT_ValidAudience");
+        var validIssuer = Environment.GetEnvironmentVariable("JWT_ValidIssuer");
+        var secretKey = Environment.GetEnvironmentVariable("JWT_SecretKey");
+
+        Console.WriteLine($"ValidAudience: {validAudience}");
+        Console.WriteLine($"ValidIssuer: {validIssuer}");
+        Console.WriteLine($"SecretKey: {secretKey}");
 
         // Verifica si los valores son nulos o vacíos
-        if (string.IsNullOrEmpty(validIssuer) || string.IsNullOrEmpty(validAudience) || string.IsNullOrEmpty(secret))
+        if (string.IsNullOrEmpty(validIssuer) || string.IsNullOrEmpty(validAudience) || string.IsNullOrEmpty(secretKey))
         {
             throw new InvalidOperationException("JWT configuration is missing or invalid.");
         }
@@ -40,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = validIssuer,
             ValidAudience = validAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secret))
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey))
         };
     });
 
@@ -84,6 +91,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // Agregar controladores y Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
 builder.Host.UseSerilog();
 //Configuracion para poner tokens en el Swagger
 builder.Services.AddSwaggerGen(opt =>
@@ -130,6 +138,8 @@ app.UseCors(policyBuilder => policyBuilder
 app.UseAuthentication();
 app.UseTokenValidationMiddleware();
 app.UseAuthorization();
+
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
