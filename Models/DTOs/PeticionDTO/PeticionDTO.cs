@@ -13,6 +13,11 @@ public class PeticionDTO
     public string? DescripcionEmpresa { get; set; }
     [Required]
     public string? DireccionEmpresa { get; set; }
+    [Required]
+    public int TelefonoEmpresa { get; set; }
+    public string? CorreoEmpresa { get; set; }
+    [Required]
+    public string? SitioWebEmpresa { get; set; }
     public string? ImagenEmpresaURL { get; set; }
     [Required]
     public int IdCategoriaEmpresa { get; set; }

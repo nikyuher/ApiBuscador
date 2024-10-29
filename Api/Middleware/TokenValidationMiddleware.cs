@@ -1,11 +1,6 @@
-// Middleware/TokenValidationMiddleware.cs
 
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 using System.Security.Claims;
 using Buscador.Data; 
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace Buscador.Api.Middleware
 {

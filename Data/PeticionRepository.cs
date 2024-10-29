@@ -33,6 +33,9 @@ namespace Buscador.Data
                 NombreEmpresa = peticion.NombreEmpresa,
                 DescripcionEmpresa = peticion.DescripcionEmpresa,
                 DireccionEmpresa = peticion.DireccionEmpresa,
+                TelefonoEmpresa = peticion.TelefonoEmpresa,
+                CorreoEmpresa = peticion.CorreoEmpresa,
+                SitioWebEmpresa = peticion.SitioWebEmpresa,
                 ImagenEmpresaURL = peticion.ImagenEmpresaURL,
                 IdCategoriaEmpresa = peticion.IdCategoriaEmpresa,
                 IdCiudadEmpresa = peticion.IdCiudadEmpresa
@@ -73,6 +76,9 @@ namespace Buscador.Data
                 NombreEmpresa = peticionDTO.NombreEmpresa,
                 DescripcionEmpresa = peticionDTO.DescripcionEmpresa,
                 DireccionEmpresa = peticionDTO.DireccionEmpresa,
+                TelefonoEmpresa = peticionDTO.TelefonoEmpresa,
+                CorreoEmpresa = peticionDTO.CorreoEmpresa,
+                SitioWebEmpresa = peticionDTO.SitioWebEmpresa,
                 ImagenEmpresaURL = peticionDTO.ImagenEmpresaURL,
                 IdCategoriaEmpresa = peticionDTO.IdCategoriaEmpresa,
                 IdCiudadEmpresa = peticionDTO.IdCiudadEmpresa,
@@ -119,6 +125,9 @@ namespace Buscador.Data
                         Nombre = peticion.NombreEmpresa,
                         Descripcion = peticion.DescripcionEmpresa,
                         Direccion = peticion.DireccionEmpresa,
+                        Telefono = peticion.TelefonoEmpresa,
+                        CorreoEmpresa = peticion.CorreoEmpresa,
+                        SitioWeb = peticion.SitioWebEmpresa,
                         Imagen = peticion.ImagenEmpresaURL
                     };
 

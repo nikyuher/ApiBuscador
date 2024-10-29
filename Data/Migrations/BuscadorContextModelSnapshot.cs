@@ -1283,6 +1283,9 @@ namespace Buscador.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("CorreoEmpresa")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("DescripcionEmpresa")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1306,6 +1309,13 @@ namespace Buscador.Data.Migrations
                     b.Property<string>("NombreEmpresa")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("SitioWebEmpresa")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("TelefonoEmpresa")
+                        .HasColumnType("int");
 
                     b.HasKey("IdPeticion");
 
