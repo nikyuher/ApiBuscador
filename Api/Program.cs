@@ -58,8 +58,12 @@ var configuration = builder.Configuration;
 var environment = configuration["Environment"];
 
 var connectionString = environment == "Docker" ?
-    configuration.GetConnectionString("BuscadorDB") :
-    configuration.GetConnectionString("BuscadorDBlocal");
+    configuration.GetConnectionString("ConfigDataBaseDocker") :
+      $"Server={Environment.GetEnvironmentVariable("DB_SERVER")},{Environment.GetEnvironmentVariable("DB_PORT")};" +
+      $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
+      $"User Id={Environment.GetEnvironmentVariable("DB_USER")};" +
+      $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};" +
+      $"Allow User Variables={Environment.GetEnvironmentVariable("DB_ALLOW_USER_VARIABLES")};";
 
 // Registrar DbContext con la cadena de conexiónb
 // builder.Services.AddDbContext<BuscadorContext>(options =>
