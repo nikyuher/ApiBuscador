@@ -23,7 +23,7 @@ namespace Buscador.Business
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_configuration["Email:FromName"], _configuration["Email:FromEmail"]));
+            emailMessage.From.Add(new MailboxAddress(_configuration["Email_FromName"], _configuration["Email_FromEmail"]));
             emailMessage.To.Add(new MailboxAddress(to, to));
             emailMessage.Subject = subject;
 
@@ -35,8 +35,8 @@ namespace Buscador.Business
                 try
                 {
                     // Cambiar esta línea
-                    await client.ConnectAsync(_configuration["Email:SmtpHost"], int.Parse(_configuration["Email:SmtpPort"]), SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(_configuration["Email:SmtpUser"], _configuration["Email:SmtpPass"]);
+                    await client.ConnectAsync(_configuration["Email_SmtpHost"], int.Parse(_configuration["Email_SmtpPort"]), SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync(_configuration["Email_SmtpUser"], _configuration["Email_SmtpPass"]);
                     await client.SendAsync(emailMessage);
                 }
                 catch (SmtpCommandException smtpEx)

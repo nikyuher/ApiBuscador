@@ -22,9 +22,9 @@ public class AuthService : IAuthService
     public string GenerateJwtToken(Usuario usuario)
     {
         // Obtener la clave secreta, el emisor y la audiencia de la configuración
-        var key = Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]);
-        var issuer = _configuration["JWT:ValidIssuer"];
-        var audience = _configuration["JWT:ValidAudience"];
+        var key = Encoding.UTF8.GetBytes(_configuration["JWT_SecretKey"]);
+        var issuer = _configuration["JWT_ValidIssuer"];
+        var audience = _configuration["JWT_ValidAudience"];
 
         // Crear Claims de los datos que se guardaran en el token
         var claims = new[]

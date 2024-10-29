@@ -7,7 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
+using System.Text;
 
+Env.Load("../.env");
+Log.Information("Archivo .env cargado correctamente.");
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -15,10 +18,13 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-Env.Load("../.env");
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 
+// Primero, cargamos el archivo .env
+builder.Configuration.AddEnvironmentVariables();
 // Configuración de autenticación con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -27,10 +33,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         var validAudience = Environment.GetEnvironmentVariable("JWT_ValidAudience");
         var validIssuer = Environment.GetEnvironmentVariable("JWT_ValidIssuer");
         var secretKey = Environment.GetEnvironmentVariable("JWT_SecretKey");
-
-        Console.WriteLine($"ValidAudience: {validAudience}");
-        Console.WriteLine($"ValidIssuer: {validIssuer}");
-        Console.WriteLine($"SecretKey: {secretKey}");
 
         // Verifica si los valores son nulos o vacíos
         if (string.IsNullOrEmpty(validIssuer) || string.IsNullOrEmpty(validAudience) || string.IsNullOrEmpty(secretKey))
@@ -47,7 +49,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = validIssuer,
             ValidAudience = validAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
     });
 
