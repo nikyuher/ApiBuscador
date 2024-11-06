@@ -10,6 +10,7 @@ namespace Buscador.Data
         public GetCategoriaDTO GetCategoria(string nombre);
         public GetCategoriaDTO GetCategoriaId(int idCategoria);
         public GetCategoriaEmpresasDTO GetEmpresaSCategoria(int id);
+        Task<int> GetEmpresaNumCategoriaAsync(int id);
         public Categoria CreateCategoria(AddCategoriaDTO categoria);
         public void UpdateCategoria(UpdateCategoriaDTO categoriaDTO);
         public void DeleteCategoria(int idCategoria);

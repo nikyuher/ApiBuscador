@@ -60,7 +60,7 @@ namespace Buscador.Data
         {
             var categoria = _context.Categorias
                 .Include(c => c.EmpresaCategorias)
-                .ThenInclude(ec => ec.Empresa) 
+                .ThenInclude(ec => ec.Empresa)
                 .FirstOrDefault(c => c.IdCategoria == id);
 
             if (categoria is null)
@@ -84,6 +84,21 @@ namespace Buscador.Data
             };
 
             return categoriaDTO;
+        }
+
+        public async Task<int> GetEmpresaNumCategoriaAsync(int id)
+        {
+            var categoria = await _context.Categorias
+                .Where(c => c.IdCategoria == id)
+                .Include(c => c.EmpresaCategorias)
+                .FirstOrDefaultAsync();
+
+            if (categoria == null)
+            {
+                throw new Exception($"Categoría con ID {id} no encontrada.");
+            }
+
+            return categoria.EmpresaCategorias.Count;
         }
 
         //Create 

@@ -9,6 +9,7 @@ namespace Buscador.Business
         public List<Categoria> GetAll();
         public GetCategoriaDTO GetCategoria(string nombre);
         public GetCategoriaEmpresasDTO GetEmpresaSCategoria(int id);
+        Task<int> GetEmpresaNumCategoriaAsync(int id);
         public GetCategoriaDTO GetCategoriaId(int categoriaId);
         public Categoria CreateCategoria(AddCategoriaDTO categoria);
         public void UpdateCategoria(UpdateCategoriaDTO categoriaDTO);

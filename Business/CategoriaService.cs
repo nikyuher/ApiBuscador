@@ -26,7 +26,10 @@ namespace Buscador.Business
         {
             return _categoriaRepository.GetEmpresaSCategoria(id);
         }
-
+        public async Task<int> GetEmpresaNumCategoriaAsync(int id)
+        {
+            return await _categoriaRepository.GetEmpresaNumCategoriaAsync(id);
+        }
         public GetCategoriaDTO GetCategoria(string nombre)
         {
             var categoria = _categoriaRepository.GetCategoria(nombre);

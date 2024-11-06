@@ -73,6 +73,31 @@ namespace Buscador.Api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("{idCategoria}/NumEmpresas", Name = "GetNumEmpresasCategoria")]
+        public async Task<ActionResult<int>> GetNumEmpresasCategoria([FromRoute] int idCategoria)
+        {
+            try
+            {
+                _logger.LogInformation($"Solicitud para obtener el número de empresas de la categoría con ID: {idCategoria}");
+
+                var numEmpresas = await _categoriaService.GetEmpresaNumCategoriaAsync(idCategoria);
+
+                if (numEmpresas == 0)
+                {
+                    _logger.LogWarning($"No se encontraron empresas para la categoría con ID: {idCategoria}");
+                }
+
+                return Ok(numEmpresas);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al obtener el número de empresas de la categoría con ID {idCategoria}: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+        [AllowAnonymous]
         [HttpGet("nombre", Name = "GetCategoria")]
         public ActionResult<GetCategoriaDTO> GetCategoria([FromQuery] string nombre)
         {
