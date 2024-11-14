@@ -157,7 +157,7 @@ namespace Buscador.Data
                 existingEmpresa.SitioWeb = empresaDto.SitioWeb;
                 existingEmpresa.Imagen = empresaDto.Imagen;
 
-                _context.Entry(existingEmpresa).State = EntityState.Modified;
+                _context.Empresas.Update(existingEmpresa);
                 _context.SaveChanges();
             }
             else

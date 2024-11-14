@@ -6,10 +6,11 @@ public class DatosEmpresaDTO
 {
     [Key]
     public int IdEmpresa { get; set; }
-    [Required]
     public string? Nombre { get; set; }
     public string? Descripcion { get; set; }
-    [Required]
     public string? Direccion { get; set; }
+    public int Telefono { get; set; }
+    public string? CorreoEmpresa { get; set; }
+    public string? SitioWeb { get; set; }
     public string? Imagen { get; set; }
 }

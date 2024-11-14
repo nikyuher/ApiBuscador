@@ -108,6 +108,9 @@ namespace Buscador.Data
                         Nombre = empresa.Empresa.Nombre,
                         Descripcion = empresa.Empresa.Descripcion,
                         Direccion = empresa.Empresa.Direccion,
+                        Telefono = empresa.Empresa.Telefono,
+                        CorreoEmpresa = empresa.Empresa.CorreoEmpresa,
+                        SitioWeb = empresa.Empresa.SitioWeb,
                         Imagen = empresa.Empresa.Imagen
                     }
                 }).ToList()
@@ -187,7 +190,7 @@ namespace Buscador.Data
             {
                 throw new ArgumentException("El correo electrónico ya está en uso por otro usuario.");
             }
-            existingUser.Nombre=usuario.Nombre;
+            existingUser.Nombre = usuario.Nombre;
             existingUser.Correo = usuario.Correo;
 
             _context.Usuarios.Update(existingUser);
