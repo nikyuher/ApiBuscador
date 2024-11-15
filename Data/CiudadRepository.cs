@@ -102,10 +102,14 @@ namespace Buscador.Data
                 EmpresasCiudades = ciudad.EmpresasCiudades.Select(ec => new NameEmpresaCiudadDTO
                 {
                     IdEmpresaCiudad = ec.IdEmpresaCiudad,
-                    Empresa = new NameEmpresaDTO
+                    Empresa = new DatosCortosDTO
                     {
                         IdEmpresa = ec.Empresa.IdEmpresa,
-                        Nombre = ec.Empresa.Nombre
+                        Nombre = ec.Empresa.Nombre,
+                        Descripcion = ec.Empresa.Descripcion,
+                        Direccion = ec.Empresa.Direccion,
+                        Telefono = ec.Empresa.Telefono,
+                        Imagen = ec.Empresa.Imagen
                     }
                 }).ToList()
             };
@@ -113,54 +117,53 @@ namespace Buscador.Data
             return ciudadDTO;
         }
 
-        public GetEmpresaCiudadDTO GetEmpresaCiudad(int idEmpresa, int idCiudad)
+        public GetEmpresaCiudadDTO GetEmpresaCiudad(int idCiudad, string nombreEmpresa)
         {
+            // Normalizar el nombre para buscar sin considerar diacríticos
+            var normalizedNombre = RemoveDiacritics(nombreEmpresa.ToLower());
+
+            // Buscar la ciudad junto con las empresas asociadas
             var ciudad = _context.Ciudadades
                 .Include(c => c.EmpresasCiudades)
                 .ThenInclude(ec => ec.Empresa)
                 .FirstOrDefault(c => c.IdCiudad == idCiudad);
 
-            // Si la ciudad no se encuentra, lanzar excepcio
+            // Validar que la ciudad existe
             if (ciudad is null)
             {
                 throw new Exception($"Ciudad con ID {idCiudad} no encontrada.");
             }
 
-            // Si la empresa no se encuentra, lanzar excepcion
-            var empresa = _context.Empresas.FirstOrDefault(e => e.IdEmpresa == idEmpresa);
+            // Filtrar empresas que coincidan con el nombre buscado
+            var empresasFiltradas = ciudad.EmpresasCiudades
+                .Where(ec => RemoveDiacritics(ec.Empresa.Nombre.ToLower()).Contains(normalizedNombre))
+                .OrderBy(ec => RemoveDiacritics(ec.Empresa.Nombre.ToLower()).IndexOf(normalizedNombre))
+                .ToList();
 
-            if (empresa is null)
+            // Si no hay coincidencias, lanzar excepción
+            if (!empresasFiltradas.Any())
             {
-                throw new Exception($"Empresa con ID {idEmpresa} no encontrada.");
+                throw new Exception($"No se encontraron empresas relacionadas con el nombre '{nombreEmpresa}' en la ciudad con ID {idCiudad}.");
             }
 
-            // Buscar si la empresa existe en la ciudad
-            var empresaCiudad = ciudad.EmpresasCiudades
-                .FirstOrDefault(ec => ec.Empresa.IdEmpresa == idEmpresa);
-
-            // Si no se encuentra la empresa en la ciudad, lanzar excepcion o devolver un mensaje
-            if (empresaCiudad is null)
-            {
-                throw new Exception($"No hay ninguna empresa con ID {idEmpresa} en la ciudad con ID {idCiudad}.");
-            }
-
-            // Crear el DTO con la información de la ciudad y la empresa encontrada
+            // Crear el DTO con las empresas filtradas
             var ciudadDTO = new GetEmpresaCiudadDTO
             {
                 IdCiudad = ciudad.IdCiudad,
                 Nombre = ciudad.Nombre,
-                EmpresasCiudades = new List<NameEmpresaCiudadDTO>
-        {
-            new NameEmpresaCiudadDTO
-            {
-                IdEmpresaCiudad = empresaCiudad.IdEmpresaCiudad,
-                Empresa = new NameEmpresaDTO
+                EmpresasCiudades = empresasFiltradas.Select(ec => new NameEmpresaCiudadDTO
                 {
-                    IdEmpresa = empresaCiudad.Empresa.IdEmpresa,
-                    Nombre = empresaCiudad.Empresa.Nombre
-                }
-            }
-        }
+                    IdEmpresaCiudad = ec.IdEmpresaCiudad,
+                    Empresa = new DatosCortosDTO
+                    {
+                        IdEmpresa = ec.Empresa.IdEmpresa,
+                        Nombre = ec.Empresa.Nombre,
+                        Descripcion = ec.Empresa.Descripcion,
+                        Direccion = ec.Empresa.Direccion,
+                        Telefono = ec.Empresa.Telefono,
+                        Imagen = ec.Empresa.Imagen
+                    }
+                }).ToList()
             };
 
             return ciudadDTO;

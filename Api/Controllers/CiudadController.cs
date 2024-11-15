@@ -108,17 +108,17 @@ namespace Buscador.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("empresa", Name = "GetEmpresaCiudad")]
-        public ActionResult<GetEmpresaCiudadDTO> GetEmpresaCiudad([FromQuery] int idEmpresa, [FromQuery] int idCiudad)
+        public ActionResult<GetEmpresaCiudadDTO> GetEmpresaCiudad([FromQuery] string nombreEmpresa, [FromQuery] int idCiudad)
         {
             try
             {
-                _logger.LogInformation($"Solicitud para obtener la empresa con ID {idEmpresa} en la ciudad con ID {idCiudad}");
-                var ciudad = _ciudadService.GetEmpresaCiudad(idEmpresa, idCiudad);
+                _logger.LogInformation($"Solicitud para obtener la empresa con nombre {nombreEmpresa} en la ciudad con ID {idCiudad}");
+                var ciudad = _ciudadService.GetEmpresaCiudad(idCiudad, nombreEmpresa);
                 return Ok(ciudad);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al obtener la empresa con ID {idEmpresa} en la ciudad con ID {idCiudad}: {ex.Message}");
+                _logger.LogError($"Error al obtener la empresa con nombre {nombreEmpresa} en la ciudad con ID {idCiudad}: {ex.Message}");
                 return StatusCode(500, new { message = ex.Message });
             }
         }

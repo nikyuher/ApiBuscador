@@ -7,6 +7,6 @@ public class NameEmpresaCiudadDTO
     [Key]
     public int IdEmpresaCiudad { get; set; }
     
-    public NameEmpresaDTO? Empresa { get; set; }
+    public DatosCortosDTO? Empresa { get; set; }
 
 }
