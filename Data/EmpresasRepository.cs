@@ -50,7 +50,7 @@ namespace Buscador.Data
             return empresaDTO;
         }
 
-        public List<Empresa> BuscadorEmpresaNombre(string nombre)
+        public List<EmpresaBusquedaDTO> BuscadorEmpresaNombre(string nombre)
         {
             var normalizedNombre = RemoveDiacritics(nombre.ToLower());
 
@@ -65,7 +65,12 @@ namespace Buscador.Data
                 throw new Exception($"No existe una empresa con un nombre relacionado a {nombre}");
             }
 
-            return empresas;
+            var newEmpresa = empresas.Select( empresa => new EmpresaBusquedaDTO{
+
+            } );
+
+
+            return newEmpresa;
         }
 
         public Empresa GetById(int id)
