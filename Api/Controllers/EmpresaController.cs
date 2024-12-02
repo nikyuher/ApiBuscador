@@ -43,7 +43,7 @@ namespace Buscador.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("buscar", Name = "BuscadorEmpresaNombre")]
-        public ActionResult<List<Empresa>> BuscadorEmpresaNombre([FromQuery] string nombre)
+        public ActionResult<List<EmpresaBusquedaDTO>> BuscadorEmpresaNombre([FromQuery] string nombre)
         {
             try
             {

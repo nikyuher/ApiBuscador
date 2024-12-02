@@ -15,6 +15,6 @@ public class EmpresaBusquedaDTO
 
     public int Telefono { get; set; }
     public string? Imagen { get; set; }
-    public string? NombreCiudad { get; set; }
+    public List<string> NombreCiudad { get; set; } = new List<string>();
 
 }

@@ -55,6 +55,8 @@ namespace Buscador.Data
             var normalizedNombre = RemoveDiacritics(nombre.ToLower());
 
             var empresas = _context.Empresas
+                .Include(ce => ce.EmpresasCiudades)
+                    .ThenInclude(c => c.Ciudad)
                 .AsEnumerable()
                 .Where(e => RemoveDiacritics(e.Nombre.ToLower()).Contains(normalizedNombre))
                 .OrderBy(e => RemoveDiacritics(e.Nombre.ToLower()).IndexOf(normalizedNombre))
@@ -66,8 +68,16 @@ namespace Buscador.Data
             }
 
             var newEmpresa = empresas.Select( empresa => new EmpresaBusquedaDTO{
-
-            } );
+                    IdEmpresa = empresa.IdEmpresa,
+                    Nombre = empresa.Nombre,
+                    Descripcion = empresa.Descripcion,
+                    Direccion = empresa.Direccion,
+                    Telefono  = empresa.Telefono,
+                    Imagen = empresa.Imagen,
+                    NombreCiudad =   empresa.EmpresasCiudades
+                                    .Select(ec => ec.Ciudad.Nombre)
+                                    .ToList()
+            }).ToList();
 
 
             return newEmpresa;

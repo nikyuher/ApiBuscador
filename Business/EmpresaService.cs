@@ -16,7 +16,7 @@ namespace Buscador.Business
 
         //Get
         public List<GetAllEmpresaDTO> GetAll() => _empresaRepository.GetAll();
-        public List<Empresa> BuscadorEmpresaNombre(string nombre)
+        public List<EmpresaBusquedaDTO> BuscadorEmpresaNombre(string nombre)
         {
             return _empresaRepository.BuscadorEmpresaNombre(nombre);
         }

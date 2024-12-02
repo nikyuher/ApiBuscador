@@ -8,7 +8,7 @@ namespace Buscador.Business
     {
         //Get
         List<GetAllEmpresaDTO> GetAll();
-        public List<Empresa> BuscadorEmpresaNombre(string nombre);
+        public List<EmpresaBusquedaDTO> BuscadorEmpresaNombre(string nombre);
         //Post
         Empresa GetById(int id);
         public EmpresaCategoria AddCategoriaEmpresa(AddEmpresaCategoriaDTO empresaCategoria);
